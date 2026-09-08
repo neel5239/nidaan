@@ -2,7 +2,8 @@
 require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
 const express = require('express');
 const path = require('path');
-const { login, auth } = require('./auth');
+const { login, auth, profileFor } = require('./auth');
+const register = require('./register')(profileFor);
 const { MODEL } = require('./gemini');
 const ocr = require('./ocr');
 
@@ -21,6 +22,10 @@ app.disable('x-powered-by');
 app.use(express.json({ limit: '2mb' }));
 
 app.post('/api/login', login);
+app.post('/api/register/patient', register.patient);
+app.post('/api/register/clinic', register.clinic);
+app.post('/api/register/doctor', register.doctor);
+app.get('/api/register/clinics', register.clinics);
 app.get('/api/me', auth(), (req, res) => res.json(req.user));
 app.get('/api/health', async (req, res) => {
   const key = process.env.GEMINI_API_KEY || '';

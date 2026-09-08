@@ -50,4 +50,4 @@ function auth(roles) {
   };
 }
 
-module.exports = { login, auth, initials };
+module.exports = { login, auth, initials, profileFor };

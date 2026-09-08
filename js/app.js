@@ -172,6 +172,39 @@
     }).finally(function () { btn.disabled = false; btn.innerHTML = btnLabel(loginRole); });
     return false;
   };
+  /* ---------------- registration ---------------- */
+  var regRole = 'patient';
+  var REG = {
+    patient: { title: 'Create a patient account', sub: 'You get a Nidaan ID. Your records stay yours; clinics see only what you share.', btn: 'Create patient account', nameL: 'Full name' },
+    clinic: { title: 'Register your clinic', sub: 'Creates the clinic and your admin login. Add doctors and front-desk staff afterwards.', btn: 'Register clinic', nameL: 'Your name (admin)' },
+    doctor: { title: 'Join your clinic as a doctor', sub: 'Needs the clinic registration number from your clinic admin. You then see only patients assigned to you.', btn: 'Create doctor login', nameL: 'Full name (e.g. Dr. A. Rao)' }
+  };
+  window.openRegister = function (role) {
+    setRegRole(role || loginRole);
+    ['rg-clinic-name', 'rg-clinic-reg', 'rg-clinic-addr', 'rg-clinic-phone', 'rg-clinic-spec', 'rg-doc-clinic', 'rg-doc-reg', 'rg-name', 'rg-email', 'rg-pass', 'rg-age', 'rg-phone', 'rg-city', 'rg-bg', 'rg-all'].forEach(function (id) { $(id).value = ''; });
+    $('rg-err').classList.add('hidden');
+    api('GET', '/register/clinics').then(function (cs) { $('rg-doc-clinics').textContent = cs.length ? 'Registered clinics: ' + cs.map(function (c) { return c.name; }).join(', ') : ''; }).catch(function () {});
+    openModal('m-register');
+  };
+  window.setRegRole = function (r) {
+    regRole = r; var a = REG[r];
+    $('m-reg-t').textContent = a.title; $('m-reg-sub').textContent = a.sub; $('rg-btn').textContent = a.btn; $('rg-name-l').textContent = a.nameL;
+    var radio = document.querySelector('#m-register input[name=regrole][value="' + r + '"]'); if (radio) radio.checked = true;
+    ['patient', 'clinic', 'doctor'].forEach(function (x) { document.querySelectorAll('#m-register .reg-' + x).forEach(function (el) { el.style.display = x === r ? '' : 'none'; }); });
+  };
+  window.doRegister = function () {
+    var body = { name: $('rg-name').value, email: $('rg-email').value, password: $('rg-pass').value };
+    if (regRole === 'patient') Object.assign(body, { age: $('rg-age').value, sex: $('rg-sex').value, phone: $('rg-phone').value, city: $('rg-city').value, blood_group: $('rg-bg').value, allergies: $('rg-all').value });
+    if (regRole === 'clinic') Object.assign(body, { clinic_name: $('rg-clinic-name').value, reg_no: $('rg-clinic-reg').value, type: $('rg-clinic-type').value, address: $('rg-clinic-addr').value, phone: $('rg-clinic-phone').value, specialties: $('rg-clinic-spec').value });
+    if (regRole === 'doctor') Object.assign(body, { clinic_reg_no: $('rg-doc-clinic').value, specialty: $('rg-doc-spec').value, reg_no: $('rg-doc-reg').value });
+    var btn = $('rg-btn'); btn.disabled = true; $('rg-err').classList.add('hidden');
+    api('POST', '/register/' + regRole, body).then(function (r) {
+      token = r.token; localStorage.setItem(TOKEN_KEY, token);
+      closeModal(); setLoginRole(r.user.role); enter(r.user);
+      toast(regRole === 'patient' ? 'Account created · your Nidaan ID is ' + r.user.nid : regRole === 'clinic' ? 'Clinic registered. Add doctors from the Doctors screen.' : 'Doctor login created · you joined ' + r.user.clinic_name);
+    }).catch(function (e) { $('rg-err-t').textContent = e.message; $('rg-err').classList.remove('hidden'); }).finally(function () { btn.disabled = false; });
+  };
+
   window.logout = function () {
     token = ''; USER = null; localStorage.removeItem(TOKEN_KEY); sessionStorage.removeItem(TOKEN_KEY); lastPayload = {};
     stopSpeech();

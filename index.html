@@ -69,7 +69,7 @@
       <div class="between"><label><input type="checkbox" id="login-keep" checked style="accent-color:var(--accent)">Keep me signed in</label><a href="#" onclick="toast('Ask your clinic or Nidaan support to reset the password');return false">Forgot password?</a></div>
       <button class="btn btn-primary btn-login" type="submit" id="login-btn"><svg class="ic"><use href="#i-lock"/></svg>Sign in to patient portal</button>
       <div class="notice crit hidden" id="login-err"><svg class="ic"><use href="#i-alert"/></svg><span id="login-err-t">Email or password does not match this role. Try the demo account below.</span></div>
-      <p class="small muted" style="text-align:center">New here? <a href="#" id="login-signup" onclick="toast('Sign-up is not part of this prototype. Use a demo account.');return false">Create a patient account</a></p>
+      <p class="small muted" style="text-align:center">New here? <a href="#" id="login-signup" onclick="openRegister();return false">Create a patient account</a></p>
       <div class="demo-list" id="demo-list"><div class="label" style="margin-bottom:8px">Demo accounts &middot; click to fill</div></div>
     </form>
   </div>
@@ -424,6 +424,49 @@
       <div class="notice info"><svg class="ic"><use href="#i-info"/></svg><span>The patient answers the questions again and chooses what to share. A new share to this clinic is created when they press Send, and they enter the queue.</span></div>
     </div>
     <div class="mf"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="sendRerequest()">Send request</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-register" role="dialog" aria-modal="true" aria-labelledby="m-reg-t" style="width:min(640px,100%)">
+    <div class="mh"><div><h2 id="m-reg-t">Create an account</h2><p class="muted small" id="m-reg-sub"></p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
+    <div class="mb stack" style="gap:14px">
+      <div class="rolepick" role="radiogroup" aria-label="Account type">
+        <label style="--role-c:var(--patient);--role-soft:var(--terracotta-soft)"><input type="radio" name="regrole" value="patient" onchange="setRegRole('patient')"><span class="ric" style="background:var(--patient)"><svg><use href="#i-person"/></svg></span><span class="rt">Patient</span><span class="rs">My records</span></label>
+        <label style="--role-c:var(--clinic);--role-soft:var(--blue-soft)"><input type="radio" name="regrole" value="clinic" onchange="setRegRole('clinic')"><span class="ric" style="background:var(--clinic)"><svg><use href="#i-building"/></svg></span><span class="rt">Clinic</span><span class="rs">Register clinic</span></label>
+        <label style="--role-c:var(--doctor);--role-soft:var(--teal-soft)"><input type="radio" name="regrole" value="doctor" onchange="setRegRole('doctor')"><span class="ric" style="background:var(--doctor)"><svg><use href="#i-steth"/></svg></span><span class="rt">Doctor</span><span class="rs">Join a clinic</span></label>
+      </div>
+      <!-- clinic-only -->
+      <div class="grid g2 reg-clinic">
+        <div class="field" style="grid-column:1/-1"><label class="req">Clinic name</label><input class="input" id="rg-clinic-name" placeholder="As on your signboard"></div>
+        <div class="field"><label class="req">Clinic registration number</label><input class="input" id="rg-clinic-reg" placeholder="e.g. MH/PUN/2026/04417"><span class="hint">Doctors use this number to join your clinic.</span></div>
+        <div class="field"><label>Type</label><select class="input" id="rg-clinic-type"><option>Single-doctor clinic</option><option>Multispeciality clinic</option><option>Polyclinic</option><option>Day-care centre</option></select></div>
+        <div class="field" style="grid-column:1/-1"><label>Address</label><input class="input" id="rg-clinic-addr" placeholder="Street, area, city, PIN"></div>
+        <div class="field"><label>Front desk phone</label><input class="input" id="rg-clinic-phone"></div>
+        <div class="field"><label>Specialties</label><input class="input" id="rg-clinic-spec" placeholder="General medicine, Orthopaedics"></div>
+      </div>
+      <!-- doctor-only -->
+      <div class="grid g2 reg-doctor">
+        <div class="field" style="grid-column:1/-1"><label class="req">Clinic registration number (invite code)</label><input class="input" id="rg-doc-clinic" placeholder="Ask your clinic admin, e.g. MH/PUN/2026/04417"><span class="hint" id="rg-doc-clinics"></span></div>
+        <div class="field"><label>Specialty</label><select class="input" id="rg-doc-spec"><option>General physician</option><option>Orthopaedics</option><option>Cardiology</option><option>Dermatology</option><option>ENT</option><option>Paediatrics</option><option>Gynaecology</option><option>Ayurveda</option></select></div>
+        <div class="field"><label>Medical council registration</label><input class="input" id="rg-doc-reg" placeholder="MMC 20xx/xxxxx"></div>
+      </div>
+      <!-- common -->
+      <div class="grid g2">
+        <div class="field" style="grid-column:1/-1"><label class="req" id="rg-name-l">Full name</label><input class="input" id="rg-name" autocomplete="name"></div>
+        <div class="field"><label class="req">Email (your login)</label><input class="input" id="rg-email" type="email" autocomplete="email"></div>
+        <div class="field"><label class="req">Password</label><input class="input" id="rg-pass" type="password" autocomplete="new-password" placeholder="at least 6 characters"></div>
+      </div>
+      <!-- patient-only -->
+      <div class="grid g2 reg-patient">
+        <div class="field"><label>Age</label><input class="input" id="rg-age" type="number" min="0" max="120"></div>
+        <div class="field"><label>Sex</label><select class="input" id="rg-sex"><option value="">—</option><option>M</option><option>F</option><option>Other</option></select></div>
+        <div class="field"><label>Phone</label><input class="input" id="rg-phone"></div>
+        <div class="field"><label>City</label><input class="input" id="rg-city"></div>
+        <div class="field"><label>Blood group</label><input class="input" id="rg-bg" placeholder="e.g. B+"></div>
+        <div class="field"><label>Allergies</label><input class="input" id="rg-all" placeholder="None known"></div>
+      </div>
+      <div class="notice crit hidden" id="rg-err"><svg class="ic"><use href="#i-alert"/></svg><span id="rg-err-t"></span></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="rg-btn" onclick="doRegister()">Create account</button></div>
   </div>
 
   <div class="modal hidden" id="m-adddoc" role="dialog" aria-modal="true" aria-labelledby="m-adddoc-t">

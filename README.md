@@ -42,6 +42,14 @@ npm run reset-db
 | Doctor  | anjali.rao@arogya.clinic     | doctor123  |
 | Doctor  | meera.iyer@arogya.clinic     | doctor123  |
 
+## Sign-up
+
+"New here?" on the login page opens registration:
+
+- **Patient** – name, email, password (+ optional age, sex, phone, city, blood group, allergies). Gets a Nidaan ID.
+- **Clinic** – clinic name + registration number + admin login. Add doctors afterwards from *Doctors → Add doctor*.
+- **Doctor** – joins an existing clinic using the clinic's registration number as invite code.
+
 ## End-to-end flow
 
 1. **Clinic** → *Patient arrived* → search the patient (name / Nidaan ID / phone / email) → *Add to queue and assign* → pick a doctor.
