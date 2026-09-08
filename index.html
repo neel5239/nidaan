@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nidaan · Patient, Clinic and Doctor portals</title>
+  <meta name="description" content="Nidaan front-end prototype: role-based login, patient-controlled record sharing, request-driven intake, clinic front desk and doctor portals.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.5c3 0 5.5 2 5.5 5"/></symbol>
+  <symbol id="i-steth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v6a5 5 0 0 0 10 0V3"/><path d="M10 14v2a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 20h16"/></symbol>
+  <symbol id="i-clip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 11h6M9 15h4"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17.5v.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.5"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l2.5-8h13L21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 13h5l1.5 3h5L16 13h5"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-5 3 10 2.5-7 1.5 2h5"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></symbol>
+  <symbol id="i-keyboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.5M11 10h.5M15 10h.5M7 14h10"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8l4 4-4 4M19 12H9"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></symbol>
+  <symbol id="i-building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M4 21h16M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2M10 21v-3h4v3"/></symbol>
+</svg>
+
+
+<!-- ================= LOGIN ================= -->
+<div class="login" id="login">
+  <div class="login-wrap">
+    <div class="login-intro">
+      <div class="wordmark"><span class="dot"></span>Nidaan</div>
+      <h1>One health record. Three ways in.</h1>
+      <p>Patients own their records and decide what to share. Clinics manage the front desk. Doctors see only what is assigned to them.</p>
+      <ul>
+        <li><span class="sw" style="background:var(--patient)"></span><span><b>Patient</b> &middot; keep reports, answer intake questions, share an episode with a clinic for a set time.</span></li>
+        <li><span class="sw" style="background:var(--clinic)"></span><span><b>Clinic</b> &middot; register arrivals, assign doctors, send intake requests, accept shares.</span></li>
+        <li><span class="sw" style="background:var(--doctor)"></span><span><b>Doctor</b> &middot; see assigned patients, their intake summary, reports read by OCR and red flags.</span></li>
+      </ul>
+    </div>
+    <form class="login-card" id="login-form" onsubmit="return doLogin(event)" novalidate>
+      <div><h2 id="login-title">Sign in as a patient</h2><p class="muted small" id="login-sub">Use the email and password you registered with.</p></div>
+      <div class="rolepick" role="radiogroup" aria-label="I am a">
+        <label style="--role-c:var(--patient);--role-soft:var(--terracotta-soft)"><input type="radio" name="role" value="patient" checked onchange="setLoginRole('patient')"><span class="ric" style="background:var(--patient)"><svg><use href="#i-person"/></svg></span><span class="rt">Patient</span><span class="rs">My records</span></label>
+        <label style="--role-c:var(--clinic);--role-soft:var(--blue-soft)"><input type="radio" name="role" value="clinic" onchange="setLoginRole('clinic')"><span class="ric" style="background:var(--clinic)"><svg><use href="#i-building"/></svg></span><span class="rt">Clinic</span><span class="rs">Front desk &amp; admin</span></label>
+        <label style="--role-c:var(--doctor);--role-soft:var(--teal-soft)"><input type="radio" name="role" value="doctor" onchange="setLoginRole('doctor')"><span class="ric" style="background:var(--doctor)"><svg><use href="#i-steth"/></svg></span><span class="rt">Doctor</span><span class="rs">Assigned patients</span></label>
+      </div>
+      <div class="field">
+        <label for="login-email" class="req">Email</label>
+        <input class="input" id="login-email" type="email" autocomplete="username" placeholder="you@example.com" oninput="clearErr(this)">
+        <div class="err hidden" id="login-email-err"><svg class="ic" style="width:14px;height:14px"><use href="#i-alert"/></svg><span>Enter a valid email address.</span></div>
+      </div>
+      <div class="field">
+        <label for="login-pass" class="req">Password</label>
+        <div class="pw"><input class="input" id="login-pass" type="password" autocomplete="current-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" style="padding-right:64px" oninput="clearErr(this)"><button type="button" onclick="togglePw(this)" aria-label="Show password">Show</button></div>
+        <div class="err hidden" id="login-pass-err"><svg class="ic" style="width:14px;height:14px"><use href="#i-alert"/></svg><span>Password must be at least 6 characters.</span></div>
+      </div>
+      <div class="between"><label><input type="checkbox" id="login-keep" checked style="accent-color:var(--accent)">Keep me signed in</label><a href="#" onclick="toast('Ask your clinic or Nidaan support to reset the password');return false">Forgot password?</a></div>
+      <button class="btn btn-primary btn-login" type="submit" id="login-btn"><svg class="ic"><use href="#i-lock"/></svg>Sign in to patient portal</button>
+      <div class="notice crit hidden" id="login-err"><svg class="ic"><use href="#i-alert"/></svg><span id="login-err-t">Email or password does not match this role. Try the demo account below.</span></div>
+      <p class="small muted" style="text-align:center">New here? <a href="#" id="login-signup" onclick="toast('Sign-up is not part of this prototype. Use a demo account.');return false">Create a patient account</a></p>
+      <div class="demo-list" id="demo-list"><div class="label" style="margin-bottom:8px">Demo accounts &middot; click to fill</div></div>
+    </form>
+  </div>
+</div>
+
+<header class="proto-bar">
+  <div class="wordmark"><span class="dot"></span>Nidaan</div>
+  <p class="proto-note" id="proto-note">Signed in.</p>
+  <div class="roles" id="role-badge" style="pointer-events:none"><span class="role" aria-selected="true" id="role-badge-in"><span class="sw"></span>Clinic</span></div>
+  <button class="btn btn-ghost btn-sm" onclick="logout()" title="Back to login"><svg class="ic"><use href="#i-out"/></svg>Sign out</button>
+</header>
+
+<!-- ================= CLINIC PORTAL ================= -->
+<div class="portal" id="portal-clinic">
+  <aside class="side">
+    <div class="who"><div class="avatar" style="background:var(--clinic)">AM</div><div><div class="name">Clinic</div><div class="sub">Front desk</div></div></div>
+    <button class="navb" aria-current="page" onclick="showScreen('clinic','c-today',this)"><svg class="ic"><use href="#i-grid"/></svg>Today<span class="cnt" id="c-cnt-today">0</span></button>
+    <button class="navb" onclick="showScreen('clinic','c-requests',this)"><svg class="ic"><use href="#i-inbox"/></svg>Share requests<span class="cnt" id="c-cnt-req">0</span></button>
+    <button class="navb" onclick="showScreen('clinic','c-patients',this)"><svg class="ic"><use href="#i-users"/></svg>Patients</button>
+    <button class="navb" onclick="showScreen('clinic','c-doctors',this)"><svg class="ic"><use href="#i-steth"/></svg>Doctors<span class="cnt" id="c-cnt-doc">0</span></button>
+    <div class="nav-group label">Setup</div>
+    <button class="navb" onclick="showScreen('clinic','c-onboard',this)"><svg class="ic"><use href="#i-gear"/></svg>Clinic registration</button>
+    <div class="foot"><span id="c-foot-reg">Reg. no. —</span><br><span class="today-date"></span><br><button class="signout" onclick="logout()"><svg class="ic" style="width:14px;height:14px"><use href="#i-out"/></svg>Sign out</button></div>
+  </aside>
+
+  <main class="main">
+    <!-- Today -->
+    <section class="screen active" id="c-today">
+      <div class="head">
+        <div class="grow"><h1>Today at the front desk</h1><p class="sub">Patients who arrived today. Assign a doctor to send the patient an intake request; the doctor sees the answers the moment the patient sends them.</p></div>
+        <div class="actions"><button class="btn" id="c-review-btn" onclick="showScreen('clinic','c-requests')">Review share requests</button><button class="btn btn-primary" onclick="openArrive()"><svg class="ic"><use href="#i-plus"/></svg>Patient arrived</button></div>
+      </div>
+      <div class="grid g4" style="margin-bottom:18px">
+        <div class="card kpi tone-warn"><div class="label">Waiting for a doctor</div><div class="v num" id="ck-wait">0</div><div class="d" id="ck-wait-d">—</div></div>
+        <div class="card kpi tone-info"><div class="label">With doctor now</div><div class="v num" id="ck-with">0</div><div class="d" id="ck-with-d">—</div></div>
+        <div class="card kpi tone-ok"><div class="label">Seen today</div><div class="v num" id="ck-seen">0</div><div class="d" id="ck-seen-d">—</div></div>
+        <div class="card kpi tone-neutral"><div class="label">Doctors on duty</div><div class="v num" id="ck-duty">0</div><div class="d" id="ck-duty-d">—</div></div>
+      </div>
+      <div class="card">
+        <div class="ch"><h3>Arrival queue</h3><div class="seg" role="group" aria-label="Filter queue" id="c-queue-seg"><button aria-pressed="true" data-f="all">All</button><button aria-pressed="false" data-f="waiting">Waiting</button><button aria-pressed="false" data-f="with_doctor">With doctor</button></div></div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>Patient</th><th>Arrived</th><th>Shared for this visit</th><th>Intake</th><th>Doctor</th><th>Status</th><th></th></tr></thead>
+          <tbody id="c-queue-body"></tbody>
+        </table></div>
+        <div class="empty hidden" id="c-queue-empty"><svg class="ic"><use href="#i-users"/></svg><h4>No arrivals yet today</h4><p class="small">Press “Patient arrived” when someone walks in. Their intake request goes to their Nidaan app.</p></div>
+      </div>
+    </section>
+
+    <!-- Share requests -->
+    <section class="screen" id="c-requests">
+      <div class="head"><div class="grow"><h1>Share requests</h1><p class="sub">Patients decide what this clinic can see. Each share names an episode, the items in it, and an expiry. Nothing else about the patient is visible.</p></div></div>
+      <div class="stack" id="c-req-list"></div>
+      <div class="label" style="margin:22px 0 8px">Intake requests sent by this clinic · waiting for the patient</div>
+      <div class="stack" id="c-sent-list"></div>
+      <div class="notice plain" style="margin-top:14px"><svg class="ic"><use href="#i-lock"/></svg><span>Accepting a share does not copy the patient's records into the clinic. Access ends when the share expires or the patient revokes it. Expired shares disappear from Patients automatically.</span></div>
+    </section>
+
+    <!-- Patients -->
+    <section class="screen" id="c-patients">
+      <div class="head"><div class="grow"><h1>Patients</h1><p class="sub" id="c-pat-sub">Only patients with an active share to this clinic.</p></div>
+        <div class="actions"><div class="search"><svg class="ic" style="width:16px;height:16px"><use href="#i-search"/></svg><input id="c-pat-search" placeholder="Filter by name or Nidaan ID" aria-label="Filter patients" oninput="renderClinicPatients()"></div></div></div>
+      <div class="card"><div class="tbl-wrap"><table>
+        <thead><tr><th>Patient</th><th>Shared episode</th><th>What we can see</th><th>Access ends</th><th>Assigned to</th><th></th></tr></thead>
+        <tbody id="c-pat-body"></tbody></table></div>
+        <div class="cb small muted" style="border-top:1px solid var(--line-2);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span id="c-pat-foot">Showing 0</span><span>Records you cannot see are not listed. Use “Request again” to ask the patient for a fresh intake and share.</span></div>
+      </div>
+      <div class="label" style="margin:22px 0 8px">Previously shared · access ended</div>
+      <div class="card"><div class="tbl-wrap"><table>
+        <thead><tr><th>Patient</th><th>Last episode</th><th>Last seen by</th><th>Access ended</th><th></th></tr></thead>
+        <tbody id="c-pat-ended"></tbody></table></div></div>
+    </section>
+
+    <!-- Doctors -->
+    <section class="screen" id="c-doctors">
+      <div class="head"><div class="grow"><h1>Doctors</h1><p class="sub">Doctors get their own portal login. They see only patients this clinic assigns to them.</p></div>
+        <div class="actions"><button class="btn btn-primary" onclick="openModal('m-adddoc')"><svg class="ic"><use href="#i-plus"/></svg>Add doctor</button></div></div>
+      <div class="card"><div class="tbl-wrap"><table>
+        <thead><tr><th>Doctor</th><th>Specialty</th><th>Registration</th><th>Today</th><th>Load now</th><th>Status</th><th></th></tr></thead>
+        <tbody id="c-doc-body"></tbody></table></div></div>
+    </section>
+
+    <!-- Registration / onboarding -->
+    <section class="screen" id="c-onboard">
+      <div class="onb">
+        <div class="steps" style="margin-bottom:18px"><div class="st done"><span class="n">1</span>Clinic</div><span class="sep"></span><div class="st now"><span class="n">2</span>Verify</div><span class="sep"></span><div class="st"><span class="n">3</span>First doctor</div><span class="sep"></span><div class="st"><span class="n">4</span>Done</div></div>
+        <div class="card">
+          <div class="ch"><div><h2>Clinic registration</h2><p class="muted small">Shown to patients when they choose whom to share with.</p></div></div>
+          <div class="cb stack" style="gap:16px">
+            <div class="field"><label class="req" for="cname">Clinic name</label><input id="cname" class="input"><span class="hint">Use the name on your signboard.</span></div>
+            <div class="grid g2">
+              <div class="field"><label class="req" for="creg">Clinic registration number</label><input id="creg" class="input"><span class="hint">Clinical Establishments Act registration or state equivalent.</span></div>
+              <div class="field"><label class="req" for="ctype">Type</label><select id="ctype" class="input"><option>Multispeciality clinic</option><option>Single-doctor clinic</option><option>Polyclinic</option><option>Day-care centre</option></select></div>
+            </div>
+            <div class="field"><label class="req" for="caddr">Address</label><input id="caddr" class="input"></div>
+            <div class="grid g2">
+              <div class="field"><label class="req" for="cphone">Front desk phone</label><input id="cphone" class="input"></div>
+              <div class="field"><label class="req" for="cmail">Admin email</label><input id="cmail" class="input" type="email"></div>
+            </div>
+            <div class="field"><label for="cspec">Specialties offered</label><input id="cspec" class="input" placeholder="General medicine, Orthopaedics, Dermatology"><span class="hint">Comma separated.</span></div>
+            <div class="notice info"><svg class="ic"><use href="#i-info"/></svg><span>We verify the registration number against the state register before patients can find your clinic. You can set up doctors meanwhile.</span></div>
+          </div>
+          <div class="mf"><button class="btn btn-ghost" onclick="loadClinicProfile()">Reset</button><button class="btn btn-primary" onclick="saveClinicProfile()">Save</button></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ================= DOCTOR PORTAL ================= -->
+<div class="portal" id="portal-doctor">
+  <aside class="side">
+    <div class="who"><div class="avatar" style="background:var(--doctor)">DR</div><div><div class="name">Doctor</div><div class="sub">—</div></div></div>
+    <button class="navb" aria-current="page" onclick="showScreen('doctor','d-queue',this)"><svg class="ic"><use href="#i-users"/></svg>My patients today<span class="cnt" id="d-cnt">0</span></button>
+    <button class="navb" onclick="showScreen('doctor','d-history',this)"><svg class="ic"><use href="#i-cal"/></svg>Past consultations</button>
+    <div class="nav-group label">Assigned by clinic</div>
+    <div class="small muted" style="padding:0 10px">You see a patient only while the clinic has assigned them to you and the patient's share is active.</div>
+    <div class="foot"><span id="d-foot-hours">On duty</span><br><span class="today-date"></span><br><button class="signout" onclick="logout()"><svg class="ic" style="width:14px;height:14px"><use href="#i-out"/></svg>Sign out</button></div>
+  </aside>
+
+  <main class="main">
+    <!-- Queue -->
+    <section class="screen active" id="d-queue">
+      <div class="head"><div class="grow"><h1>My patients today</h1><p class="sub">Assigned by the front desk. Ordered by red flags, then arrival time.</p></div>
+        <div class="actions"><span class="chip ok" id="d-duty-chip">On duty</span><button class="btn" id="d-pause" onclick="togglePause()">Pause new assignments</button></div></div>
+      <div class="grid g-main">
+        <div class="stack" id="d-list"></div>
+        <div class="stack">
+          <div class="card"><div class="ch"><h3>Today</h3></div><div class="cb">
+            <dl class="kv"><dt>Seen</dt><dd class="num" id="dk-seen">—</dd><dt>Waiting</dt><dd class="num" id="dk-wait">—</dd><dt>Red flags</dt><dd id="dk-flags">—</dd></dl></div></div>
+          <div class="notice plain"><svg class="ic"><use href="#i-info"/></svg><span>Nidaan summarises what the patient reported and what their reports say. It does not diagnose. Red flags are answers and values that commonly warrant priority; the clinical judgement stays with you.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Patient detail -->
+    <section class="screen" id="d-patient">
+      <div class="crumbs"><button onclick="showScreen('doctor','d-queue')">My patients today</button><span>/</span><span id="dp-crumb">Patient</span></div>
+      <div class="head">
+        <div class="grow"><h1 id="dp-name">Patient</h1>
+          <p class="sub" id="dp-sub"></p>
+          <div class="row" style="margin-top:8px" id="dp-chips"></div></div>
+        <div class="actions"><button class="btn" onclick="toast('Ask the patient to extend the share from their Nidaan app')">Request more records</button><button class="btn btn-primary" id="dp-start" onclick="startConsult()">Start consultation</button><button class="btn" id="dp-seen" onclick="markSeen()">Mark as seen</button></div>
+      </div>
+
+      <div id="dp-flagbar"></div>
+
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" aria-selected="true" onclick="showTab(this,'dt-intake')">Intake summary</button>
+        <button class="tab" role="tab" aria-selected="false" onclick="showTab(this,'dt-reports')">Shared reports<span class="cnt" id="dp-rep-cnt">0</span></button>
+        <button class="tab" role="tab" aria-selected="false" onclick="showTab(this,'dt-meds')">Medicines &amp; history</button>
+        <button class="tab" role="tab" aria-selected="false" onclick="showTab(this,'dt-notes')">My notes</button>
+      </div>
+
+      <div class="tabpane active" id="dt-intake">
+        <div class="grid g-main">
+          <div class="stack" style="gap:16px" id="dp-intake-col"></div>
+          <div class="stack" style="gap:16px">
+            <div class="card"><div class="ch"><h3>Possible disease areas</h3><span class="faint small">from answers &amp; reports</span></div><div class="cb" id="dp-cond"></div></div>
+            <div class="card"><div class="ch"><h3>Vitals recorded by clinic</h3><button class="btn btn-sm btn-ghost" onclick="openVitals()">Edit</button></div><div class="cb vit" id="dp-vitals"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabpane" id="dt-reports"><div class="stack" id="dp-reports"></div></div>
+
+      <div class="tabpane" id="dt-meds">
+        <div class="grid g2">
+          <div class="card"><div class="ch"><h3>Profile basics</h3><span class="faint small">patient-entered</span></div><div class="cb" id="dp-meds"></div></div>
+          <div class="card"><div class="ch"><h3>Shared history</h3></div><div class="cb" id="dp-hist"></div></div>
+        </div>
+      </div>
+
+      <div class="tabpane" id="dt-notes">
+        <div class="grid g-main">
+          <div class="card"><div class="ch"><h3>Consultation notes</h3><span class="chip plain">Private to you</span></div><div class="cb stack">
+            <div class="field"><label for="dnote">Assessment and plan</label><textarea id="dnote" class="input" style="min-height:140px" placeholder="Notes stay in your portal. The patient sees only what you upload as a prescription or summary." oninput="noteChanged()"></textarea></div>
+            <div class="row" style="justify-content:space-between"><span class="faint small" id="dnote-status">Autosaves 3 s after you stop typing</span><div class="actions"><button class="btn" onclick="saveNote(true)">Save notes</button><label class="btn btn-primary" style="cursor:pointer"><input type="file" id="rx-file" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="uploadRx(this)">Upload prescription to patient</label></div></div>
+          </div></div>
+          <div class="notice plain"><svg class="ic"><use href="#i-lock"/></svg><span>Notes are never visible to the clinic front desk or other doctors. A prescription you upload goes into the patient's episode folder and is visible to them immediately.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Past consultations -->
+    <section class="screen" id="d-history">
+      <div class="head"><div class="grow"><h1>Past consultations</h1><p class="sub">Your notes stay. Patient records disappear when the share ends.</p></div>
+        <div class="actions"><div class="search"><svg class="ic" style="width:16px;height:16px"><use href="#i-search"/></svg><input id="d-hist-search" placeholder="Search by name or complaint" aria-label="Search consultations" oninput="renderHistory()"></div></div></div>
+      <div class="card"><div class="tbl-wrap"><table>
+        <thead><tr><th>Date</th><th>Patient</th><th>Complaint</th><th>Records</th><th>Outcome</th><th></th></tr></thead>
+        <tbody id="d-hist-body"></tbody></table></div>
+        <div class="empty hidden" id="d-hist-empty"><svg class="ic"><use href="#i-cal"/></svg><h4>No past consultations</h4><p class="small">Patients you mark as seen appear here.</p></div></div>
+    </section>
+  </main>
+</div>
+
+<!-- ================= PATIENT PORTAL ================= -->
+<div class="portal" id="portal-patient">
+  <aside class="side">
+    <div class="who"><div class="avatar" style="background:var(--patient)">PT</div><div><div class="name">Patient</div><div class="sub">—</div></div></div>
+    <button class="navb" aria-current="page" onclick="showScreen('patient','p-home',this)"><svg class="ic"><use href="#i-grid"/></svg>My health</button>
+    <button class="navb" onclick="showScreen('patient','p-upload',this)"><svg class="ic"><use href="#i-upload"/></svg>Upload a report</button>
+    <button class="navb" onclick="showScreen('patient','p-vault',this)"><svg class="ic"><use href="#i-folder"/></svg>All documents<span class="cnt" id="p-doc-cnt">0</span></button>
+    <button class="navb" onclick="showScreen('patient','p-sharing',this)"><svg class="ic"><use href="#i-share"/></svg>Sharing<span class="cnt" id="p-req-cnt" style="background:var(--terracotta-soft);color:var(--terracotta-text)">0</span></button>
+    <div class="foot">Your records stay yours.<br>Clinics see only what you share.<br><button class="signout" onclick="logout()"><svg class="ic" style="width:14px;height:14px"><use href="#i-out"/></svg>Sign out</button></div>
+  </aside>
+
+  <main class="main">
+    <!-- Home -->
+    <section class="screen active" id="p-home">
+      <div class="head"><div class="grow"><h1>My health</h1><p class="sub">Each health problem is kept as its own episode, with its reports, prescriptions and what you shared.</p></div>
+        <div class="actions"><button class="btn" onclick="showScreen('patient','p-upload')"><svg class="ic"><use href="#i-upload"/></svg>Upload a report</button><button class="btn btn-primary hidden" id="p-home-req" onclick="showScreen('patient','p-sharing');showTab(document.getElementById('ps-tab-req'),'ps-req')"><svg class="ic"><use href="#i-inbox"/></svg>1 clinic request</button></div></div>
+      <div id="p-home-reqnote"></div>
+      <div class="grid g-main">
+        <div class="stack" style="gap:16px">
+          <div><div class="label" style="margin-bottom:8px">Active</div><div class="stack" id="p-epi-active"></div></div>
+          <div id="p-epi-resolved-wrap"><div class="label" style="margin-bottom:8px">Resolved</div><div class="stack" id="p-epi-resolved"></div></div>
+        </div>
+        <div class="stack" style="gap:16px">
+          <div class="card"><div class="ch"><h3>Who can see what</h3><button class="btn btn-sm btn-ghost" onclick="showScreen('patient','p-sharing')">Manage</button></div><div class="cb stack" style="gap:10px" id="p-whocan"></div></div>
+          <div class="card"><div class="ch"><h3>Profile basics</h3><button class="btn btn-sm btn-ghost" onclick="openProfile()">Edit</button></div><div class="cb" id="p-profile"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Episode detail -->
+    <section class="screen" id="p-episode">
+      <div class="crumbs"><button onclick="showScreen('patient','p-home')">My health</button><span>/</span><span id="pe-crumb">Episode</span></div>
+      <div class="head"><div class="grow"><h1 id="pe-title">Episode</h1><p class="sub" id="pe-sub"></p></div>
+        <div class="actions"><button class="btn" onclick="gotoUpload(PE.id)">Add document</button><button class="btn" onclick="openShare(PE.id)">Share…</button><button class="btn btn-primary" id="pe-resolve" onclick="toggleResolved()">Mark resolved</button></div></div>
+      <div class="grid g-main">
+        <div class="stack" style="gap:16px">
+          <div class="card"><div class="ch"><h3>Documents in this episode</h3><span class="mono faint" id="pe-doc-n">0</span></div><div class="cb stack" style="gap:8px" id="pe-docs"></div></div>
+          <div class="card"><div class="ch"><h3>Intake history</h3><span class="mono faint" id="pe-int-n">0 recorded</span><span class="chip plain">Stored in your record</span></div><div class="cb" id="pe-intakes"></div></div>
+        </div>
+        <div class="stack" style="gap:16px">
+          <div class="card"><div class="ch"><h3>Timeline</h3></div><div class="cb"><ul class="tl" id="pe-timeline"></ul></div></div>
+          <div class="card"><div class="ch"><h3>Shared with</h3></div><div class="cb" id="pe-shared"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upload -->
+    <section class="screen" id="p-upload">
+      <div class="head"><div class="grow"><h1>Upload a report</h1><p class="sub">Photos of paper reports work fine. We keep the original, read the text (OCR) and pull out the key values for you to confirm.</p></div></div>
+      <div class="grid g-main">
+        <div class="card"><div class="cb stack" style="gap:16px">
+          <label class="drop" id="up-drop" style="cursor:pointer;display:block"><input type="file" id="up-file" accept=".pdf,.jpg,.jpeg,.png,.webp,.heic" style="display:none" onchange="uploadPicked(this.files[0])"><svg class="ic" style="width:28px;height:28px;color:var(--ink-3)"><use href="#i-upload"/></svg><div style="margin-top:8px"><b>Choose a file</b> or drag it here</div><div class="small faint">PDF, JPG, PNG, WEBP · up to 25 MB</div></label>
+          <div id="up-filerow"></div>
+          <div class="grid g2" id="up-form" style="display:none">
+            <div class="field" style="grid-column:1/-1"><label class="req" for="upname">Document name</label><input id="upname" class="input"></div>
+            <div class="field"><label class="req" for="upepi">Which problem is this for?</label><select id="upepi" class="input" onchange="document.getElementById('upnew-wrap').style.display=this.value==='new'?'':'none'"></select><span class="hint">Keeps this report with the right problem so you can share just that folder later.</span></div>
+            <div class="field"><label class="req" for="uptype">Document type</label><select id="uptype" class="input"><option>Lab report</option><option>Imaging report</option><option>Prescription</option><option>Discharge summary</option><option>Doctor's letter</option><option>Other</option></select></div>
+            <div class="field" id="upnew-wrap" style="grid-column:1/-1;display:none"><label class="req" for="upnew">Name of the new problem</label><input id="upnew" class="input" placeholder="e.g. Right knee pain"></div>
+            <div class="field"><label class="req" for="update">Date on the report</label><input id="update" class="input" type="date"></div>
+            <div class="field"><label for="upfrom">Issued by</label><input id="upfrom" class="input" placeholder="Lab, hospital or doctor"></div>
+          </div>
+          <div id="up-extract"></div>
+          <div class="row" style="justify-content:flex-end" id="up-actions" style="display:none"><button class="btn btn-ghost" onclick="cancelUpload()">Cancel</button><button class="btn btn-primary" id="up-save" onclick="saveUpload()" disabled>Save to episode</button></div>
+        </div></div>
+        <div class="stack">
+          <div class="notice plain"><svg class="ic"><use href="#i-lock"/></svg><span>Uploading never shares. A document becomes visible to a clinic only when you include it in a share.</span></div>
+          <div class="card"><div class="ch"><h3>Tips for photos</h3></div><div class="cb small muted stack" style="gap:6px"><span>Lay the page flat, avoid shadows.</span><span>Include the lab name and date at the top.</span><span>Multi-page reports: upload each page, or one PDF.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Intake (opened from a clinic request) -->
+    <section class="screen" id="p-intake">
+      <div class="head"><div class="grow"><div class="crumbs"><button onclick="showScreen('patient','p-sharing')">Sharing</button><span>/</span><span id="qs-crumb">Request</span></div><h1 id="qs-h1">Intake</h1><p class="sub" id="qs-sub">The clinic asked a few questions before your visit. Not a diagnosis. Sent only when you press Send.</p></div><div class="actions"><button class="btn btn-ghost" onclick="exitIntake()">Save and exit</button></div></div>
+      <div class="onb">
+        <div class="row" style="justify-content:space-between;margin-bottom:8px"><span class="small muted">Step <span id="qs-n" class="mono">1</span> of about <span id="qs-max" class="mono">9</span></span><span class="small faint" id="qs-title"></span></div>
+        <div class="prog" style="margin-bottom:18px"><i id="qs-bar" style="width:10%"></i></div>
+        <div class="card">
+          <div class="cb" id="qs-body"></div>
+          <div class="mf"><button class="btn btn-ghost" id="qs-back" onclick="qStep(-1)" disabled>Back</button><span style="flex:1"></span><button class="btn btn-primary" id="qs-next" onclick="qStep(1)">Continue</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Vault -->
+    <section class="screen" id="p-vault">
+      <div class="head"><div class="grow"><h1>All documents</h1><p class="sub" id="pv-sub">Grouped by episode so nothing gets mixed up.</p></div>
+        <div class="actions"><div class="search"><svg class="ic" style="width:16px;height:16px"><use href="#i-search"/></svg><input id="pv-search" placeholder="Search by name, lab or value" aria-label="Search documents" oninput="renderVault()"></div><button class="btn btn-primary" onclick="showScreen('patient','p-upload')">Upload</button></div></div>
+      <div class="stack" style="gap:16px" id="pv-list"></div>
+    </section>
+
+    <!-- Sharing -->
+    <section class="screen" id="p-sharing">
+      <div class="head"><div class="grow"><h1>Sharing</h1><p class="sub">Clinics ask; you decide. Every share names the episode, the exact items and how long. Revoke any time.</p></div>
+        <div class="actions"><button class="btn btn-primary" onclick="openShare()"><svg class="ic"><use href="#i-share"/></svg>Share with a clinic</button></div></div>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" id="ps-tab-req" aria-selected="true" onclick="showTab(this,'ps-req')"><svg class="ic" style="width:15px;height:15px;vertical-align:-3px;margin-right:6px"><use href="#i-inbox"/></svg>Requests<span class="cnt" id="ps-req-cnt">0</span></button>
+        <button class="tab" role="tab" aria-selected="false" onclick="showTab(this,'ps-active')">Active shares<span class="cnt" id="ps-active-cnt">0</span></button>
+        <button class="tab" role="tab" aria-selected="false" onclick="showTab(this,'ps-ended')">Ended<span class="cnt" id="ps-ended-cnt">0</span></button>
+        <button class="tab" role="tab" aria-selected="false" onclick="showTab(this,'ps-log')">Access log</button>
+      </div>
+      <div>
+        <div class="tabpane active" id="ps-req">
+          <div class="stack" style="gap:12px">
+            <div id="ps-req-list" class="stack" style="gap:12px"></div>
+            <div class="empty hidden" id="req-empty"><svg class="ic"><use href="#i-inbox"/></svg><h4>No open requests</h4><p class="small">When a clinic assigns you to a doctor, their request appears here.</p></div>
+            <div class="notice plain"><svg class="ic"><use href="#i-lock"/></svg><span>Opening a request shares nothing. The clinic sees your answers and reports only after you press Send on the last step.</span></div>
+          </div>
+        </div>
+        <div class="tabpane" id="ps-active"><div class="stack" style="gap:12px" id="ps-active-list"></div></div>
+        <div class="tabpane" id="ps-ended"><div class="stack" style="gap:12px" id="ps-ended-list"></div></div>
+        <div class="tabpane" id="ps-log">
+          <div class="card"><div class="ch"><h3>Access log</h3><span class="faint small">who opened what</span></div><div class="cb"><ul class="tl" style="margin-bottom:-18px" id="ps-log-list"></ul></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ================= MODALS ================= -->
+<div class="scrim" id="scrim" onclick="if(event.target===this)closeModal()">
+
+  <div class="modal hidden" id="m-arrive" role="dialog" aria-modal="true" aria-labelledby="m-arrive-t">
+    <div class="mh"><div><h2 id="m-arrive-t">Patient arrived</h2><p class="muted small">Find the patient by name, Nidaan ID, phone or email. Adding them to the queue sends an intake request to their Nidaan app.</p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
+    <div class="mb stack" style="gap:14px">
+      <div class="search"><svg class="ic" style="width:16px;height:16px"><use href="#i-search"/></svg><input id="ar-search" placeholder="Search by name, phone, email or Nidaan ID" aria-label="Search patients" oninput="arriveSearch(this.value)"></div>
+      <div class="stack" style="gap:8px" id="ar-results"><div class="small faint">Type at least 3 characters.</div></div>
+      <div class="field"><label for="ar-note">Note for the doctor <span class="faint" style="font-weight:400">(optional)</span></label><input id="ar-note" class="input" placeholder="e.g. Patient is anxious, prefers Marathi"></div>
+      <div class="notice plain"><svg class="ic"><use href="#i-info"/></svg><span>Patients without an active share can still be seen; the doctor will just not have any records or intake from Nidaan until the patient answers the request.</span></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn" id="ar-add" onclick="arriveAdd(false)" disabled>Add to queue</button><button class="btn btn-primary" id="ar-assign" onclick="arriveAdd(true)" disabled>Add to queue and assign</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-assign" role="dialog" aria-modal="true" aria-labelledby="m-assign-t">
+    <div class="mh"><div><h2 id="m-assign-t">Assign a doctor</h2><p class="muted small"><b id="as-name">Patient</b> · <span id="as-cc"></span></p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
+    <div class="mb stack" style="gap:14px">
+      <div class="row" style="justify-content:space-between"><span class="label">Doctors at this clinic</span></div>
+      <div class="stack" style="gap:8px" id="as-list"></div>
+      <div class="field"><label for="as-note">Note for the doctor <span class="faint" style="font-weight:400">(optional)</span></label><input id="as-note" class="input" placeholder="e.g. Patient is anxious, prefers Marathi"></div>
+      <div class="notice info"><svg class="ic"><use href="#i-info"/></svg><span>The patient gets an intake request naming this doctor. The doctor sees the answers and shared documents the moment the patient sends them. The front desk only ever sees the share summary.</span></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="doAssign()">Assign and notify</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-shared" role="dialog" aria-modal="true" aria-labelledby="m-shared-t">
+    <div class="mh"><div><h2 id="m-shared-t">Share summary</h2><p class="muted small">What the front desk can see. Contents open only for the assigned doctor.</p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
+    <div class="mb" id="msh-body"></div>
+    <div class="mf"><button class="btn" onclick="closeModal()">Close</button><button class="btn btn-primary" id="msh-assign">Assign doctor</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-rerequest" role="dialog" aria-modal="true" aria-labelledby="m-rr-t">
+    <div class="mh"><div><h2 id="m-rr-t">Request intake again</h2><p class="muted small"><b id="rr-name">Patient</b> · <span id="rr-sub"></span></p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
+    <div class="mb stack" style="gap:14px">
+      <div class="field"><label class="req" for="rr-reason">Reason for the request</label><input id="rr-reason" class="input" placeholder="e.g. Follow-up visit on Friday, please update your symptoms and share the new reports"><span class="hint">Shown to the patient with the request.</span></div>
+      <div class="row" style="justify-content:space-between"><span class="label">Doctor (optional)</span></div>
+      <div class="stack" style="gap:8px" id="rr-list"></div>
+      <div class="notice info"><svg class="ic"><use href="#i-info"/></svg><span>The patient answers the questions again and chooses what to share. A new share to this clinic is created when they press Send, and they enter the queue.</span></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="sendRerequest()">Send request</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-adddoc" role="dialog" aria-modal="true" aria-labelledby="m-adddoc-t">
+    <div class="mh"><div><h2 id="m-adddoc-t">Add a doctor</h2><p class="muted small">Creates their doctor-portal login at this clinic.</p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
+    <div class="mb grid g2">
+      <div class="field"><label class="req">Full name</label><input class="input" id="ad-name" placeholder="Dr. "></div>
+      <div class="field"><label class="req">Specialty</label><select class="input" id="ad-spec"><option>General physician</option><option>Orthopaedics</option><option>Cardiology</option><option>Dermatology</option><option>ENT</option><option>Paediatrics</option><option>Gynaecology</option></select></div>
+      <div class="field"><label>Medical council registration</label><input class="input" id="ad-reg" placeholder="MMC 20xx/xxxxx"></div>
+      <div class="field"><label class="req">Email (login)</label><input class="input" id="ad-email" type="email" placeholder="name@arogya.clinic"></div>
+      <div class="field"><label class="req">Password</label><input class="input" id="ad-pass" value="doctor123"></div>
+      <div class="field"><label>Usual hours</label><div class="row"><input class="input" id="ad-from" type="time" value="09:00" style="width:130px"><span class="muted">to</span><input class="input" id="ad-to" type="time" value="17:00" style="width:130px"></div></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addDoctor()">Create login</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-share" role="dialog" aria-modal="true" aria-labelledby="m-share-t">
+    <div class="mh"><div><h2 id="m-share-t">Share with a clinic</h2><p class="muted small">Choose exactly what they can see and for how long. The clinic accepts the share at the front desk.</p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
+    <div class="mb stack" style="gap:16px">
+      <div class="field"><label class="req">Clinic</label><select class="input" id="sh-clinic"></select></div>
+      <div class="field"><label class="req">Which problem?</label><select class="input" id="sh-epi" onchange="renderShareItems()"></select></div>
+      <div class="field"><label>Include</label><div class="opts" id="sh-items"></div><span class="hint">Documents from other episodes are never included unless you add them here.</span></div>
+      <div class="field"><label class="req">For how long?</label>
+        <div class="opts" style="grid-template-columns:repeat(3,1fr)">
+          <label class="opt"><input type="radio" name="dur" value="visit">This visit only</label>
+          <label class="opt"><input type="radio" name="dur" value="30d" checked>30 days</label>
+          <label class="opt"><input type="radio" name="dur" value="revoke">Until I revoke</label>
+        </div></div>
+      <div class="notice plain"><svg class="ic"><use href="#i-lock"/></svg><span>The clinic can assign any of its doctors to see this. You will see who opened what in your access log, and you can revoke at any moment.</span></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="sh-btn" onclick="doShare()">Share</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-profile" role="dialog" aria-modal="true" aria-labelledby="m-profile-t">
+    <div class="mh"><div><h2 id="m-profile-t">Profile basics</h2><p class="muted small">Included automatically in every share. The doctor sees these next to your intake.</p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
+    <div class="mb grid g2">
+      <div class="field"><label>Age</label><input class="input" id="pf-age" type="number" min="0" max="120"></div>
+      <div class="field"><label>Sex</label><select class="input" id="pf-sex"><option value="">—</option><option>M</option><option>F</option><option>Other</option></select></div>
+      <div class="field"><label>Phone</label><input class="input" id="pf-phone"></div>
+      <div class="field"><label>City</label><input class="input" id="pf-city"></div>
+      <div class="field"><label>Blood group</label><input class="input" id="pf-bg" placeholder="e.g. B+"></div>
+      <div class="field"><label>Allergies</label><input class="input" id="pf-all" placeholder="e.g. Sulpha drugs, or None known"></div>
+      <div class="field" style="grid-column:1/-1"><label>Long-term conditions</label><input class="input" id="pf-cond" placeholder="e.g. Type 2 diabetes since 2014"></div>
+      <div class="field" style="grid-column:1/-1"><label>Regular medicines</label><input class="input" id="pf-med" placeholder="e.g. Metformin 500 mg twice daily"></div>
+      <div class="field" style="grid-column:1/-1"><label>Emergency contact</label><input class="input" id="pf-em" placeholder="Name · phone"></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveProfile()">Save</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-vitals" role="dialog" aria-modal="true" aria-labelledby="m-vitals-t">
+    <div class="mh"><div><h2 id="m-vitals-t">Vitals</h2><p class="muted small">Recorded at this visit.</p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
+    <div class="mb grid g2">
+      <div class="field"><label>BP</label><input class="input" id="vt-bp" placeholder="120/80"></div>
+      <div class="field"><label>Pulse</label><input class="input" id="vt-pulse" placeholder="72"></div>
+      <div class="field"><label>SpO₂</label><input class="input" id="vt-spo2" placeholder="98%"></div>
+      <div class="field"><label>Temp</label><input class="input" id="vt-temp" placeholder="36.8°"></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveVitals()">Save</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-doc" role="dialog" aria-modal="true" aria-labelledby="m-doc-t" style="width:min(1000px,100%)">
+    <div class="mh"><div><h2 id="m-doc-t">Document</h2><p class="muted small" id="m-doc-sub"></p></div><button class="xbtn" onclick="closeModal()" aria-label="Close">×</button></div>
+    <div class="mb" style="padding:0;background:var(--surface-2)"><div id="m-doc-body" style="height:min(72vh,760px);display:grid;place-items:center;overflow:auto"></div></div>
+    <div class="mf"><a class="btn btn-ghost" id="m-doc-new" href="#" target="_blank" rel="noopener">Open in new tab</a><span style="flex:1"></span><button class="btn btn-primary" onclick="closeModal()">Close</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-prev-intake" role="dialog" aria-modal="true" aria-labelledby="m-prev-t" style="width:min(760px,100%)">
+    <div class="mh"><div><h2 id="m-prev-t">Previous intake summaries</h2><p class="muted small" id="mprev-sub"></p></div><button class="xbtn" onclick="closeModal()" aria-label="Close">×</button></div>
+    <div class="mb stack" style="gap:12px" id="mprev-body"></div>
+    <div class="mf"><button class="btn btn-primary" onclick="closeModal()">Back to current intake</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-intake-view" role="dialog" aria-modal="true" aria-labelledby="m-iv-t" style="width:min(760px,100%)">
+    <div class="mh"><div><h2 id="m-iv-t">Intake summary</h2><p class="muted small" id="m-iv-sub"></p></div><button class="xbtn" onclick="closeModal()" aria-label="Close">×</button></div>
+    <div class="mb stack" style="gap:12px" id="m-iv-body"></div>
+    <div class="mf"><button class="btn btn-primary" onclick="closeModal()">Close</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><svg class="ic"><use href="#i-check"/></svg><span id="toast-t"></span></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

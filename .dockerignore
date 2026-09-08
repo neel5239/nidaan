@@ -1,0 +1,8 @@
+node_modules
+data
+.env
+.git
+.claude
+*.log
+index.prototype.html
+js/app.prototype.js

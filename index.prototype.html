@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nidaan · Patient, Clinic and Doctor portals</title>
+  <meta name="description" content="Nidaan front-end prototype: role-based login, patient-controlled record sharing, request-driven intake, clinic front desk and doctor portals.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.5c3 0 5.5 2 5.5 5"/></symbol>
+  <symbol id="i-steth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v6a5 5 0 0 0 10 0V3"/><path d="M10 14v2a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 20h16"/></symbol>
+  <symbol id="i-clip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 11h6M9 15h4"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17.5v.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.5"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l2.5-8h13L21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 13h5l1.5 3h5L16 13h5"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-5 3 10 2.5-7 1.5 2h5"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></symbol>
+  <symbol id="i-keyboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.5M11 10h.5M15 10h.5M7 14h10"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8l4 4-4 4M19 12H9"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></symbol>
+  <symbol id="i-building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M4 21h16M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2M10 21v-3h4v3"/></symbol>
+</svg>
+
+<!-- ================= LOGIN ================= -->
+<div class="login" id="login">
+  <div class="login-wrap">
+    <div class="login-intro">
+      <div class="wordmark"><span class="dot"></span>Nidaan</div>
+      <h1>One health record. Three ways in.</h1>
+      <p>Patients own their records and decide what to share. Clinics manage the front desk. Doctors see only what is assigned to them.</p>
+      <ul>
+        <li><span class="sw" style="background:var(--patient)"></span><span><b>Patient</b> &middot; check symptoms, keep reports, share an episode with a clinic for a set time.</span></li>
+        <li><span class="sw" style="background:var(--clinic)"></span><span><b>Clinic</b> &middot; accept shares, run today&rsquo;s queue, assign doctors, manage staff.</span></li>
+        <li><span class="sw" style="background:var(--doctor)"></span><span><b>Doctor</b> &middot; see assigned patients, their intake and red flags, write consultation notes.</span></li>
+      </ul>
+    </div>
+    <form class="login-card" id="login-form" onsubmit="return doLogin(event)" novalidate>
+      <div><h2 id="login-title">Sign in as a patient</h2><p class="muted small" id="login-sub">Use the email and password you registered with.</p></div>
+      <div class="rolepick" role="radiogroup" aria-label="I am a">
+        <label style="--role-c:var(--patient);--role-soft:var(--terracotta-soft)"><input type="radio" name="role" value="patient" checked onchange="setLoginRole('patient')"><span class="ric" style="background:var(--patient)"><svg><use href="#i-person"/></svg></span><span class="rt">Patient</span><span class="rs">My records</span></label>
+        <label style="--role-c:var(--clinic);--role-soft:var(--blue-soft)"><input type="radio" name="role" value="clinic" onchange="setLoginRole('clinic')"><span class="ric" style="background:var(--clinic)"><svg><use href="#i-building"/></svg></span><span class="rt">Clinic</span><span class="rs">Front desk &amp; admin</span></label>
+        <label style="--role-c:var(--doctor);--role-soft:var(--teal-soft)"><input type="radio" name="role" value="doctor" onchange="setLoginRole('doctor')"><span class="ric" style="background:var(--doctor)"><svg><use href="#i-steth"/></svg></span><span class="rt">Doctor</span><span class="rs">Assigned patients</span></label>
+      </div>
+      <div class="field">
+        <label for="login-email" class="req">Email</label>
+        <input class="input" id="login-email" type="email" autocomplete="username" placeholder="you@example.com" oninput="clearErr(this)">
+        <div class="err hidden" id="login-email-err"><svg class="ic" style="width:14px;height:14px"><use href="#i-alert"/></svg><span>Enter a valid email address.</span></div>
+      </div>
+      <div class="field">
+        <label for="login-pass" class="req">Password</label>
+        <div class="pw"><input class="input" id="login-pass" type="password" autocomplete="current-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" style="padding-right:64px" oninput="clearErr(this)"><button type="button" onclick="togglePw(this)" aria-label="Show password">Show</button></div>
+        <div class="err hidden" id="login-pass-err"><svg class="ic" style="width:14px;height:14px"><use href="#i-alert"/></svg><span>Password must be at least 6 characters.</span></div>
+      </div>
+      <div class="between"><label><input type="checkbox" checked style="accent-color:var(--accent)">Keep me signed in</label><a href="#" onclick="toast('Password reset link sent (prototype)');return false">Forgot password?</a></div>
+      <button class="btn btn-primary btn-login" type="submit" id="login-btn"><svg class="ic"><use href="#i-lock"/></svg>Sign in to patient portal</button>
+      <div class="notice crit hidden" id="login-err"><svg class="ic"><use href="#i-alert"/></svg><span>Email or password does not match this role. Try the demo account below.</span></div>
+      <p class="small muted" style="text-align:center">New here? <a href="#" id="login-signup" onclick="toast('Sign-up flow coming next');return false">Create a patient account</a></p>
+      <div class="demo-list" id="demo-list"><div class="label" style="margin-bottom:8px">Demo accounts &middot; click to fill</div></div>
+    </form>
+  </div>
+</div>
+
+<header class="proto-bar">
+  <div class="wordmark"><span class="dot"></span>Nidaan</div>
+  <p class="proto-note" id="proto-note">Signed in to the clinic portal.</p>
+  <div class="roles" id="role-badge" style="pointer-events:none"><span class="role" aria-selected="true" id="role-badge-in"><span class="sw"></span>Clinic</span></div>
+  <button class="btn btn-ghost btn-sm" onclick="logout()" title="Back to login"><svg class="ic"><use href="#i-out"/></svg>Sign out</button>
+</header>
+
+<!-- ================= CLINIC PORTAL ================= -->
+<div class="portal active" id="portal-clinic">
+  <aside class="side">
+    <div class="who"><div class="avatar" style="background:var(--clinic)">AM</div><div><div class="name">Arogya Multispeciality</div><div class="sub">Priya Deshmukh · Front desk</div></div></div>
+    <button class="navb" aria-current="page" onclick="showScreen('clinic','c-today',this)"><svg class="ic"><use href="#i-grid"/></svg>Today<span class="cnt">6</span></button>
+    <button class="navb" onclick="showScreen('clinic','c-requests',this)"><svg class="ic"><use href="#i-inbox"/></svg>Share requests<span class="cnt">2</span></button>
+    <button class="navb" onclick="showScreen('clinic','c-patients',this)"><svg class="ic"><use href="#i-users"/></svg>Patients</button>
+    <button class="navb" onclick="showScreen('clinic','c-doctors',this)"><svg class="ic"><use href="#i-steth"/></svg>Doctors<span class="cnt">5</span></button>
+    <div class="nav-group label">Setup</div>
+    <button class="navb" onclick="showScreen('clinic','c-onboard',this)"><svg class="ic"><use href="#i-gear"/></svg>Clinic registration</button>
+    <div class="foot">Reg. no. MH/PUN/2026/04417<br>Thu 3 Sep 2026<br><button class="signout" onclick="logout()"><svg class="ic" style="width:14px;height:14px"><use href="#i-out"/></svg>Sign out</button></div>
+  </aside>
+
+  <main class="main">
+    <!-- Today -->
+    <section class="screen active" id="c-today">
+      <div class="head">
+        <div class="grow"><h1>Today at the front desk</h1><p class="sub">Patients who have shared with this clinic and arrived, or are expected, today.</p></div>
+        <div class="actions"><button class="btn" onclick="showScreen('clinic','c-requests')">Review 2 new shares</button><button class="btn btn-primary" onclick="openModal('m-arrive')"><svg class="ic"><use href="#i-plus"/></svg>Patient arrived</button></div>
+      </div>
+      <div class="grid g4" style="margin-bottom:18px">
+        <div class="card kpi tone-warn"><div class="label">Waiting for a doctor</div><div class="v num">2</div><div class="d">1 has red flags in intake</div></div>
+        <div class="card kpi tone-info"><div class="label">With doctor now</div><div class="v num">3</div><div class="d">across 3 doctors on duty</div></div>
+        <div class="card kpi tone-ok"><div class="label">Seen today</div><div class="v num">11</div><div class="d">avg wait 14 min</div></div>
+        <div class="card kpi tone-neutral"><div class="label">Doctors on duty</div><div class="v num">4<span class="faint" style="font-size:16px">/5</span></div><div class="d">Dr. Bhat off until 4 pm</div></div>
+      </div>
+      <div class="card">
+        <div class="ch"><h3>Arrival queue</h3><div class="seg" role="group" aria-label="Filter queue"><button aria-pressed="true">All</button><button aria-pressed="false">Waiting</button><button aria-pressed="false">With doctor</button></div></div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>Patient</th><th>Arrived</th><th>Shared for this visit</th><th>Intake</th><th>Doctor</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><div class="pn">Sunita Pawar</div><div class="ps">58 F · <span class="mono">NID-1187-2290</span></div></td><td class="mono">09:42</td><td>Chest discomfort episode<div class="ps">Intake + 3 reports</div></td><td><span class="chip crit">3 red flags</span></td><td class="muted">—</td><td><span class="chip warn">Waiting 18 min</span></td><td><button class="btn btn-sm btn-primary" onclick="openAssign('Sunita Pawar','Chest discomfort on exertion · 3 red flags','GP')">Assign doctor</button></td></tr>
+            <tr><td><div class="pn">Kavita Joshi</div><div class="ps">45 F · <span class="mono">NID-3320-0451</span></div></td><td class="mono">09:55</td><td>Recurrent headaches<div class="ps">Intake only</div></td><td><span class="chip warn">1 flag</span></td><td class="muted">—</td><td><span class="chip warn">Waiting 5 min</span></td><td><button class="btn btn-sm btn-primary" onclick="openAssign('Kavita Joshi','Recurrent headaches, 3 weeks · 1 flag','GP')">Assign doctor</button></td></tr>
+            <tr><td><div class="pn">Rohan Mehta</div><div class="ps">34 M · <span class="mono">NID-2041-7783</span></div></td><td class="mono">09:10</td><td>Right knee pain<div class="ps">Intake + 2 reports</div></td><td><span class="chip warn">1 flag</span></td><td>Dr. Anjali Rao<div class="ps">Orthopaedics</div></td><td><span class="chip info">With doctor</span></td><td><button class="btn btn-sm btn-ghost" onclick="openModal('m-shared')">View shared</button></td></tr>
+            <tr><td><div class="pn">Imran Shaikh</div><div class="ps">61 M · <span class="mono">NID-0912-8834</span></div></td><td class="mono">09:20</td><td>Hypertension follow-up<div class="ps">Intake + 1 report</div></td><td><span class="chip ok">No flags</span></td><td>Dr. Vikram Sethi<div class="ps">General physician</div></td><td><span class="chip info">With doctor</span></td><td><button class="btn btn-sm btn-ghost">View shared</button></td></tr>
+            <tr><td><div class="pn">Arjun Nair</div><div class="ps">27 M · <span class="mono">NID-5560-1102</span></div></td><td class="mono">09:31</td><td>Skin rash on forearms<div class="ps">Intake + 2 photos</div></td><td><span class="chip ok">No flags</span></td><td>Dr. Meera Iyer<div class="ps">Dermatology</div></td><td><span class="chip info">With doctor</span></td><td><button class="btn btn-sm btn-ghost">View shared</button></td></tr>
+            <tr><td><div class="pn">Deepak Verma</div><div class="ps">39 M · <span class="mono">NID-7741-3305</span></div></td><td class="mono">08:50</td><td>Fever, 3 days<div class="ps">Intake only</div></td><td><span class="chip ok">No flags</span></td><td>Dr. Vikram Sethi</td><td><span class="chip ok">Seen · 09:35</span></td><td></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- Share requests -->
+    <section class="screen" id="c-requests">
+      <div class="head"><div class="grow"><h1>Share requests</h1><p class="sub">Patients decide what this clinic can see. Each share names an episode, the items in it, and an expiry. Nothing else about the patient is visible.</p></div></div>
+      <div class="stack">
+        <div class="card perm">
+          <div class="avatar" style="background:var(--patient)">SP</div>
+          <div class="pc"><div class="pn">Sunita Pawar <span class="chip crit" style="margin-left:6px">3 red flags in intake</span></div><div class="pm">Shared <b>Chest discomfort on exertion</b> · today 08:58 · expires 10 Sep 2026 · appointment requested for today</div>
+            <div class="pi"><span class="tag">Intake summary</span><span class="tag">HbA1c · Jun 2026</span><span class="tag">Lipid profile · Jun 2026</span><span class="tag">ECG · Aug 2025</span><span class="tag">Current medicines</span></div></div>
+          <div class="actions"><button class="btn btn-sm" onclick="openModal('m-shared')">Preview</button><button class="btn btn-sm btn-primary" onclick="acceptShare(this,'Sunita Pawar')">Accept &amp; add to queue</button></div>
+        </div>
+        <div class="card perm">
+          <div class="avatar" style="background:var(--patient)">KJ</div>
+          <div class="pc"><div class="pn">Kavita Joshi <span class="chip warn" style="margin-left:6px">1 flag</span></div><div class="pm">Shared <b>Recurrent headaches</b> · today 09:12 · expires end of this visit</div>
+            <div class="pi"><span class="tag">Intake summary</span></div></div>
+          <div class="actions"><button class="btn btn-sm">Preview</button><button class="btn btn-sm btn-primary" onclick="acceptShare(this,'Kavita Joshi')">Accept &amp; add to queue</button></div>
+        </div>
+        <div class="notice plain"><svg class="ic"><use href="#i-lock"/></svg><span>Accepting a share does not copy the patient's records into the clinic. Access ends when the share expires or the patient revokes it. Expired shares disappear from Patients automatically.</span></div>
+      </div>
+    </section>
+
+    <!-- Patients -->
+    <section class="screen" id="c-patients">
+      <div class="head"><div class="grow"><h1>Patients</h1><p class="sub">Only patients with an active share to this clinic. 14 active · 96 expired in the last year.</p></div>
+        <div class="actions"><div class="search"><svg class="ic" style="width:16px;height:16px"><use href="#i-search"/></svg><input placeholder="Search name, phone or Nidaan ID" aria-label="Search patients"></div><button class="btn"><svg class="ic"><use href="#i-cal"/></svg>Active today</button></div></div>
+      <div class="card"><div class="tbl-wrap"><table>
+        <thead><tr><th>Patient</th><th>Shared episode</th><th>What we can see</th><th>Access ends</th><th>Last assigned to</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><div class="pn">Rohan Mehta</div><div class="ps">34 M · <span class="mono">NID-2041-7783</span> · 98220 xxxxx</div></td><td>Right knee pain</td><td><span class="tag">Intake</span> <span class="tag">2 reports</span></td><td><span class="mono">30 Sep 2026</span></td><td>Dr. Anjali Rao</td><td><button class="btn btn-sm" onclick="openAssign('Rohan Mehta','Right knee pain · 1 flag','Orthopaedics')">Assign</button></td></tr>
+          <tr><td><div class="pn">Sunita Pawar</div><div class="ps">58 F · <span class="mono">NID-1187-2290</span></div></td><td>Chest discomfort on exertion</td><td><span class="tag">Intake</span> <span class="tag">3 reports</span> <span class="tag">Medicines</span></td><td><span class="mono">10 Sep 2026</span></td><td class="muted">Not yet</td><td><button class="btn btn-sm btn-primary" onclick="openAssign('Sunita Pawar','Chest discomfort on exertion · 3 red flags','GP')">Assign</button></td></tr>
+          <tr><td><div class="pn">Imran Shaikh</div><div class="ps">61 M · <span class="mono">NID-0912-8834</span></div></td><td>Hypertension follow-up</td><td><span class="tag">Intake</span> <span class="tag">1 report</span> <span class="tag">BP log</span></td><td><span class="chip ok plain">Until revoked</span></td><td>Dr. Vikram Sethi</td><td><button class="btn btn-sm">Assign</button></td></tr>
+          <tr><td><div class="pn">Arjun Nair</div><div class="ps">27 M · <span class="mono">NID-5560-1102</span></div></td><td>Skin rash on forearms</td><td><span class="tag">Intake</span> <span class="tag">2 photos</span></td><td><span class="mono">This visit</span></td><td>Dr. Meera Iyer</td><td><button class="btn btn-sm">Assign</button></td></tr>
+          <tr><td><div class="pn">Kavita Joshi</div><div class="ps">45 F · <span class="mono">NID-3320-0451</span></div></td><td>Recurrent headaches</td><td><span class="tag">Intake</span></td><td><span class="mono">This visit</span></td><td class="muted">Not yet</td><td><button class="btn btn-sm btn-primary" onclick="openAssign('Kavita Joshi','Recurrent headaches · 1 flag','GP')">Assign</button></td></tr>
+          <tr><td><div class="pn">Neha Kulkarni</div><div class="ps">31 F · <span class="mono">NID-8804-6617</span></div></td><td>Pregnancy check-ups</td><td><span class="tag">Intake</span> <span class="tag">6 reports</span></td><td><span class="mono">31 Dec 2026</span></td><td>Dr. Vikram Sethi</td><td><button class="btn btn-sm">Assign</button></td></tr>
+        </tbody></table></div>
+        <div class="cb small muted" style="border-top:1px solid var(--line-2);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span>Showing 6 of 14</span><span>Records you cannot see are not listed. Ask the patient to share from their Nidaan app.</span></div>
+      </div>
+    </section>
+
+    <!-- Doctors -->
+    <section class="screen" id="c-doctors">
+      <div class="head"><div class="grow"><h1>Doctors</h1><p class="sub">Doctors get their own portal login. They see only patients this clinic assigns to them.</p></div>
+        <div class="actions"><button class="btn btn-primary" onclick="openModal('m-adddoc')"><svg class="ic"><use href="#i-plus"/></svg>Add doctor</button></div></div>
+      <div class="card"><div class="tbl-wrap"><table>
+        <thead><tr><th>Doctor</th><th>Specialty</th><th>Registration</th><th>Today</th><th>Load now</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><div class="pn">Dr. Anjali Rao</div><div class="ps">anjali.rao@arogya.clinic</div></td><td>Orthopaedics</td><td class="mono">MMC 2011/04471</td><td class="mono">10:00–14:00</td><td><span class="num">1</span> <span class="faint small">with · 0 waiting</span></td><td><span class="chip ok">On duty</span></td><td><button class="btn btn-sm btn-ghost">Edit</button></td></tr>
+          <tr><td><div class="pn">Dr. Vikram Sethi</div><div class="ps">vikram.sethi@arogya.clinic</div></td><td>General physician</td><td class="mono">MMC 2008/11920</td><td class="mono">09:00–17:00</td><td><span class="num">1</span> <span class="faint small">with · 2 waiting</span></td><td><span class="chip ok">On duty</span></td><td><button class="btn btn-sm btn-ghost">Edit</button></td></tr>
+          <tr><td><div class="pn">Dr. Meera Iyer</div><div class="ps">meera.iyer@arogya.clinic</div></td><td>Dermatology</td><td class="mono">MMC 2015/00318</td><td class="mono">09:30–13:30</td><td><span class="num">1</span> <span class="faint small">with · 0 waiting</span></td><td><span class="chip ok">On duty</span></td><td><button class="btn btn-sm btn-ghost">Edit</button></td></tr>
+          <tr><td><div class="pn">Dr. Sameer Kulkarni</div><div class="ps">sameer.k@arogya.clinic</div></td><td>Cardiology</td><td class="mono">MMC 2006/07755</td><td class="mono">11:00–15:00</td><td><span class="num">0</span></td><td><span class="chip ok">On duty</span></td><td><button class="btn btn-sm btn-ghost">Edit</button></td></tr>
+          <tr><td><div class="pn">Dr. Nikhil Bhat</div><div class="ps">Invite sent · not yet logged in</div></td><td>ENT</td><td class="mono">MMC 2018/02290</td><td class="mono">16:00–19:00</td><td class="muted">—</td><td><span class="chip">Off until 4 pm</span></td><td><button class="btn btn-sm btn-ghost">Resend invite</button></td></tr>
+        </tbody></table></div></div>
+    </section>
+
+    <!-- Registration / onboarding -->
+    <section class="screen" id="c-onboard">
+      <div class="onb">
+        <div class="steps" style="margin-bottom:18px"><div class="st done"><span class="n">1</span>Clinic</div><span class="sep"></span><div class="st now"><span class="n">2</span>Verify</div><span class="sep"></span><div class="st"><span class="n">3</span>First doctor</div><span class="sep"></span><div class="st"><span class="n">4</span>Done</div></div>
+        <div class="card">
+          <div class="ch"><div><h2>Register your clinic</h2><p class="muted small">Takes about 3 minutes. You can add doctors and staff later.</p></div></div>
+          <div class="cb stack" style="gap:16px">
+            <div class="field"><label class="req" for="cname">Clinic name</label><input id="cname" class="input" value="Arogya Multispeciality Clinic"><span class="hint">Shown to patients when they choose whom to share with. Use the name on your signboard.</span></div>
+            <div class="grid g2">
+              <div class="field"><label class="req" for="creg">Clinic registration number</label><input id="creg" class="input" value="MH/PUN/2026/04417"><span class="hint">Clinical Establishments Act registration or state equivalent.</span></div>
+              <div class="field"><label class="req" for="ctype">Type</label><select id="ctype" class="input"><option>Multispeciality clinic</option><option>Single-doctor clinic</option><option>Polyclinic</option><option>Day-care centre</option></select></div>
+            </div>
+            <div class="field"><label class="req" for="caddr">Address</label><input id="caddr" class="input" value="Plot 14, Bhandarkar Road, Deccan Gymkhana, Pune 411004"></div>
+            <div class="grid g2">
+              <div class="field"><label class="req" for="cphone">Front desk phone</label><input id="cphone" class="input" value="+91 20 2567 1190"></div>
+              <div class="field"><label class="req" for="cmail">Admin email</label><input id="cmail" class="input invalid" value="priya@arogya"><span class="err"><svg class="ic" style="width:14px;height:14px"><use href="#i-alert"/></svg>Enter a full email address, e.g. priya@arogya.clinic</span></div>
+            </div>
+            <div class="field"><label>Specialties offered</label><div class="row"><span class="chip accent plain">General medicine</span><span class="chip accent plain">Orthopaedics</span><span class="chip accent plain">Dermatology</span><span class="chip accent plain">Cardiology</span><span class="chip accent plain">ENT</span><button class="btn btn-sm btn-ghost">+ Add</button></div></div>
+            <div class="notice info"><svg class="ic"><use href="#i-info"/></svg><span>We verify the registration number against the state register before patients can find your clinic. This usually completes within one working day; you can set up doctors meanwhile.</span></div>
+          </div>
+          <div class="mf"><button class="btn btn-ghost">Back</button><button class="btn btn-primary" onclick="toast('Clinic details saved. Verification pending.')">Save and continue</button></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<!-- ================= DOCTOR PORTAL ================= -->
+<div class="portal" id="portal-doctor">
+  <aside class="side">
+    <div class="who"><div class="avatar" style="background:var(--doctor)">VS</div><div><div class="name">Dr. Vikram Sethi</div><div class="sub">General physician · Arogya</div></div></div>
+    <button class="navb" aria-current="page" onclick="showScreen('doctor','d-queue',this)"><svg class="ic"><use href="#i-users"/></svg>My patients today<span class="cnt">3</span></button>
+    <button class="navb" onclick="showScreen('doctor','d-history',this)"><svg class="ic"><use href="#i-cal"/></svg>Past consultations</button>
+    <div class="nav-group label">Assigned by clinic</div>
+    <div class="small muted" style="padding:0 10px">You see a patient only while the clinic has assigned them to you and the patient's share is active.</div>
+    <div class="foot">On duty 09:00–17:00<br>Thu 3 Sep 2026<br><button class="signout" onclick="logout()"><svg class="ic" style="width:14px;height:14px"><use href="#i-out"/></svg>Sign out</button></div>
+  </aside>
+
+  <main class="main">
+    <!-- Queue -->
+    <section class="screen active" id="d-queue">
+      <div class="head"><div class="grow"><h1>My patients today</h1><p class="sub">Assigned by the front desk. Ordered by red flags, then arrival time.</p></div>
+        <div class="actions"><span class="chip ok">On duty</span><button class="btn">Pause new assignments</button></div></div>
+      <div class="grid g-main">
+        <div class="stack">
+          <div class="card pat-card urgent" onclick="openPatient()">
+            <div class="avatar" style="background:var(--patient)">SP</div>
+            <div class="body"><div class="row" style="justify-content:space-between"><span><b>Sunita Pawar</b> <span class="muted">58 F</span> <span class="mono faint">NID-1187-2290</span></span><span class="chip warn">Waiting 22 min</span></div>
+              <div class="cc">Chest discomfort on exertion, 5 days</div>
+              <div class="meta">Shared: intake + HbA1c, lipid profile, ECG (2025), current medicines · until 10 Sep</div>
+              <div class="flags"><span class="chip crit">Radiates to left arm</span><span class="chip crit">Breathless on stairs</span><span class="chip crit">Diabetic 12 yrs</span><span class="chip warn">BP 150/94 self-reported</span></div></div>
+            <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();openPatient()">Open</button>
+          </div>
+          <div class="card pat-card" onclick="toast('Prototype: only Sunita Pawar is fully built out.')">
+            <div class="avatar" style="background:var(--patient)">KJ</div>
+            <div class="body"><div class="row" style="justify-content:space-between"><span><b>Kavita Joshi</b> <span class="muted">45 F</span> <span class="mono faint">NID-3320-0451</span></span><span class="chip warn">Waiting 9 min</span></div>
+              <div class="cc">Recurrent headaches, 3 weeks</div>
+              <div class="meta">Shared: intake only · this visit</div>
+              <div class="flags"><span class="chip warn">Worse on waking</span><span class="chip ok">No visual symptoms</span></div></div>
+            <button class="btn btn-sm">Open</button>
+          </div>
+          <div class="card pat-card" onclick="toast('Prototype: only Sunita Pawar is fully built out.')">
+            <div class="avatar" style="background:var(--patient)">IS</div>
+            <div class="body"><div class="row" style="justify-content:space-between"><span><b>Imran Shaikh</b> <span class="muted">61 M</span> <span class="mono faint">NID-0912-8834</span></span><span class="chip info">In consultation</span></div>
+              <div class="cc">Hypertension follow-up</div>
+              <div class="meta">Shared: intake + BP log (30 days), last prescription · until revoked</div>
+              <div class="flags"><span class="chip ok">No flags</span><span class="chip plain">Avg BP 138/86 this month</span></div></div>
+            <button class="btn btn-sm">Open</button>
+          </div>
+          <div class="card" style="opacity:.75"><div class="perm"><div class="avatar" style="background:var(--ink-3)">DV</div><div class="pc"><div class="pn">Deepak Verma <span class="chip ok" style="margin-left:6px">Seen 09:35</span></div><div class="pm">Fever, 3 days · notes saved · share ended at end of visit</div></div><button class="btn btn-sm btn-ghost">View notes</button></div></div>
+        </div>
+        <div class="stack">
+          <div class="card"><div class="ch"><h3>Today</h3></div><div class="cb">
+            <dl class="kv"><dt>Seen</dt><dd class="num">4 of 7 assigned</dd><dt>Waiting</dt><dd class="num">2 · longest 22 min</dd><dt>Red flags</dt><dd>1 patient</dd><dt>Next break</dt><dd class="mono">13:00</dd></dl></div></div>
+          <div class="notice plain"><svg class="ic"><use href="#i-info"/></svg><span>Nidaan summarises what the patient reported. It does not diagnose. Red flags are answers that commonly warrant priority; the clinical judgement stays with you.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Patient detail -->
+    <section class="screen" id="d-patient">
+      <div class="crumbs"><button onclick="showScreen('doctor','d-queue')">My patients today</button><span>/</span><span>Sunita Pawar</span></div>
+      <div class="head">
+        <div class="grow"><h1>Sunita Pawar <span class="muted" style="font-weight:400">58 F</span></h1>
+          <p class="sub"><span class="mono">NID-1187-2290</span> · Pune · Assigned to you at 10:04 by front desk</p>
+          <div class="row" style="margin-top:8px"><span class="chip accent"><svg class="ic" style="width:12px;height:12px"><use href="#i-lock"/></svg>Shared by patient · Chest discomfort episode</span><span class="chip plain">Access until 10 Sep 2026</span><span class="chip plain">Patient can revoke anytime</span></div></div>
+        <div class="actions"><button class="btn">Request more records</button><button class="btn btn-primary" onclick="toast('Consultation started 10:06')">Start consultation</button></div>
+      </div>
+
+      <div class="flag" style="margin-bottom:18px"><svg class="ic" style="width:20px;height:20px;color:var(--crit);flex:none"><use href="#i-alert"/></svg><div><div class="ft">3 red flags from intake · reported today 08:51</div><div class="fs">Exertional chest discomfort radiating to the left arm, breathlessness on climbing one flight of stairs, and long-standing diabetes. Consider seeing this patient before others in the queue.</div></div></div>
+
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" aria-selected="true" onclick="showTab(this,'dt-intake')">Intake summary</button>
+        <button class="tab" role="tab" aria-selected="false" onclick="showTab(this,'dt-reports')">Shared reports<span class="cnt">3</span></button>
+        <button class="tab" role="tab" aria-selected="false" onclick="showTab(this,'dt-meds')">Medicines &amp; history</button>
+        <button class="tab" role="tab" aria-selected="false" onclick="showTab(this,'dt-notes')">My notes</button>
+      </div>
+
+      <div class="tabpane active" id="dt-intake">
+        <div class="grid g-main">
+          <div class="stack" style="gap:16px">
+            <div class="card"><div class="ch"><div><h3>Current intake</h3><div class="small muted">Sent today 08:51 · answered by speaking · 14 answers</div></div><span class="chip accent">Latest</span><button class="btn btn-sm btn-ghost" onclick="openModal('m-prev-intake')"><svg class="ic"><use href="#i-cal"/></svg>Previous intake summaries<span class="cnt" style="margin-left:6px;font-family:var(--mono);font-size:11px;background:var(--surface-2);padding:0 6px;border-radius:999px">2</span></button></div><div class="cb">
+              <dl class="kv">
+                <dt>Main problem</dt><dd><b>Chest discomfort on exertion</b></dd>
+                <dt>Since</dt><dd>5 days · gradual onset</dd>
+                <dt>Character</dt><dd>“Tightness, like a band” · centre of chest</dd>
+                <dt>Severity</dt><dd><span class="mono">6/10</span> during activity · <span class="mono">1/10</span> at rest</dd>
+                <dt>Triggers</dt><dd>Climbing stairs, walking fast, after heavy meals</dd>
+                <dt>Relieved by</dt><dd>Rest within 5–10 minutes</dd>
+                <dt>Associated</dt><dd>Breathlessness, sweating once (yesterday). No nausea, no palpitations, no fever.</dd>
+                <dt>Similar before</dt><dd>No</dd>
+                <dt>Self-recorded</dt><dd>BP <span class="mono">150/94</span> (home monitor, this morning) · Fasting sugar <span class="mono">162 mg/dL</span> (2 days ago)</dd>
+              </dl></div></div>
+            <div class="card"><div class="ch"><h3>Red flags</h3><span class="chip crit">3 critical</span><span class="chip warn">1 caution</span></div><div class="cb stack" style="gap:8px">
+              <div class="flag"><div><div class="ft">Discomfort radiates to left arm</div><div class="fs">Answered “Yes” to “Does the pain spread to your arm, jaw or back?”</div></div></div>
+              <div class="flag"><div><div class="ft">Breathless on climbing one flight of stairs</div><div class="fs">New in the last week; no prior breathing problems reported.</div></div></div>
+              <div class="flag"><div><div class="ft">Type 2 diabetes for 12 years</div><div class="fs">On metformin. Last HbA1c 8.1% (Jun 2026, shared).</div></div></div>
+              <div class="flag warn"><div><div class="ft">Self-reported BP 150/94</div><div class="fs">Single home reading; not previously on BP medication.</div></div></div>
+            </div></div>
+          </div>
+          <div class="stack" style="gap:16px">
+            <div class="card"><div class="ch"><h3>For your consideration</h3></div><div class="cb">
+              <div class="disclaim" style="margin-bottom:12px"><b>Not a diagnosis.</b> Patterns below are matched from the patient's answers only, to help you orient quickly. Order is by how many reported features match.</div>
+              <div class="cond"><div><div class="cn">Exertional angina / ischaemic heart disease</div><div class="cs">Exertional, relieved by rest, radiation, diabetes, dyspnoea</div></div><div class="cl">5 features</div></div>
+              <div class="cond"><div><div class="cn">Gastro-oesophageal reflux</div><div class="cs">Worse after heavy meals, central tightness</div></div><div class="cl">2 features</div></div>
+              <div class="cond"><div><div class="cn">Musculoskeletal chest pain</div><div class="cs">Central location; but no positional or tender component reported</div></div><div class="cl">1 feature</div></div>
+            </div></div>
+            <div class="card"><div class="ch"><h3>Vitals recorded by clinic</h3><button class="btn btn-sm btn-ghost">Edit</button></div><div class="cb vit">
+              <div><div class="l">BP</div><div class="v">148/92</div></div><div><div class="l">Pulse</div><div class="v">88</div></div><div><div class="l">SpO₂</div><div class="v">97%</div></div><div><div class="l">Temp</div><div class="v">36.8°</div></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabpane" id="dt-reports">
+        <div class="stack">
+          <div class="notice info"><svg class="ic"><use href="#i-info"/></svg><span>Only the 3 documents the patient chose to share for this episode are shown. Older records exist in her vault; use “Request more records” to ask for them.</span></div>
+          <div class="doc"><div class="th">PDF</div><div><div class="dn">HbA1c and fasting glucose</div><div class="dm">Lab report · Metropolis Labs · 18 Jun 2026 · HbA1c <span class="mono">8.1%</span> · FBS <span class="mono">154</span></div></div><div class="dr"><span class="chip warn">Above target</span><button class="btn btn-sm">Open</button></div></div>
+          <div class="doc"><div class="th">PDF</div><div><div class="dn">Lipid profile</div><div class="dm">Lab report · Metropolis Labs · 18 Jun 2026 · LDL <span class="mono">142</span> · TG <span class="mono">210</span> · HDL <span class="mono">38</span></div></div><div class="dr"><span class="chip warn">LDL high</span><button class="btn btn-sm">Open</button></div></div>
+          <div class="doc"><div class="th img">ECG</div><div><div class="dn">Resting ECG</div><div class="dm">Imaging · Ruby Hall Clinic · 22 Aug 2025 · uploaded as photo · reported normal at the time</div></div><div class="dr"><span class="chip plain">13 months old</span><button class="btn btn-sm">Open</button></div></div>
+        </div>
+      </div>
+
+      <div class="tabpane" id="dt-meds">
+        <div class="grid g2">
+          <div class="card"><div class="ch"><h3>Current medicines</h3><span class="faint small">patient-entered</span></div><div class="cb">
+            <dl class="kv"><dt>Metformin</dt><dd>500 mg · twice daily · since 2014</dd><dt>Multivitamin</dt><dd>once daily</dd><dt>Allergies</dt><dd><span class="chip crit">Sulpha drugs</span></dd></dl></div></div>
+          <div class="card"><div class="ch"><h3>Shared history</h3></div><div class="cb">
+            <ul class="tl">
+              <li class="now"><div class="tt">Chest discomfort on exertion</div><div class="ts">Episode opened by patient · 3 intakes (current + 2 previous) · shared with Arogya</div><div class="tm">28 Aug – today</div></li>
+              <li class="done"><div class="tt">Diabetes review</div><div class="ts">Not shared · patient chose to include the June lab reports only</div><div class="tm">Jun 2026</div></li>
+              <li class="done"><div class="tt">Earlier episodes</div><div class="ts">Not shared with this clinic</div><div class="tm">—</div></li>
+            </ul></div></div>
+        </div>
+      </div>
+
+      <div class="tabpane" id="dt-notes">
+        <div class="grid g-main">
+          <div class="card"><div class="ch"><h3>Consultation notes</h3><span class="chip plain">Private to you</span></div><div class="cb stack">
+            <div class="field"><label for="dnote">Assessment and plan</label><textarea id="dnote" class="input" style="min-height:140px" placeholder="Notes stay in your portal. The patient sees only what you upload as a prescription or summary."></textarea></div>
+            <div class="row" style="justify-content:space-between"><span class="faint small">Autosaves every 10 s</span><div class="actions"><button class="btn">Refer to Dr. Kulkarni (Cardiology)</button><button class="btn btn-primary" onclick="toast('Prescription sent to patient vault')">Upload prescription to patient</button></div></div>
+          </div></div>
+          <div class="notice plain"><svg class="ic"><use href="#i-lock"/></svg><span>Notes are never visible to the clinic front desk or other doctors. A referral to Dr. Kulkarni asks the patient to extend the share to him; the front desk is notified.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Past consultations -->
+    <section class="screen" id="d-history">
+      <div class="head"><div class="grow"><h1>Past consultations</h1><p class="sub">Your notes stay. Patient records disappear when the share ends.</p></div>
+        <div class="actions"><div class="search"><svg class="ic" style="width:16px;height:16px"><use href="#i-search"/></svg><input placeholder="Search by name or complaint" aria-label="Search consultations"></div></div></div>
+      <div class="card"><div class="tbl-wrap"><table>
+        <thead><tr><th>Date</th><th>Patient</th><th>Complaint</th><th>Records</th><th>Outcome</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="mono">03 Sep</td><td><div class="pn">Deepak Verma</div><div class="ps">39 M</div></td><td>Fever, 3 days</td><td><span class="chip plain">Share ended</span></td><td>Prescription uploaded</td><td><button class="btn btn-sm btn-ghost">Notes</button></td></tr>
+          <tr><td class="mono">02 Sep</td><td><div class="pn">Neha Kulkarni</div><div class="ps">31 F</div></td><td>Pregnancy check-up, 24 wk</td><td><span class="chip ok">Active until Dec</span></td><td>Follow-up 2 wks</td><td><button class="btn btn-sm btn-ghost">Notes</button></td></tr>
+          <tr><td class="mono">01 Sep</td><td><div class="pn">Rahul Bhosale</div><div class="ps">52 M</div></td><td>Back pain, 2 months</td><td><span class="chip plain">Share ended</span></td><td>Referred to Orthopaedics</td><td><button class="btn btn-sm btn-ghost">Notes</button></td></tr>
+          <tr><td class="mono">01 Sep</td><td><div class="pn">Fatima Sayyed</div><div class="ps">29 F</div></td><td>Persistent cough</td><td><span class="chip plain">Share ended</span></td><td>Chest X-ray requested</td><td><button class="btn btn-sm btn-ghost">Notes</button></td></tr>
+        </tbody></table></div></div>
+    </section>
+  </main>
+</div>
+<!-- ================= PATIENT PORTAL ================= -->
+<div class="portal" id="portal-patient">
+  <aside class="side">
+    <div class="who"><div class="avatar" style="background:var(--patient)">RM</div><div><div class="name">Rohan Mehta</div><div class="sub">34 M · NID-2041-7783</div></div></div>
+    <button class="navb" aria-current="page" onclick="showScreen('patient','p-home',this)"><svg class="ic"><use href="#i-grid"/></svg>My health</button>
+    <button class="navb" onclick="showScreen('patient','p-upload',this)"><svg class="ic"><use href="#i-upload"/></svg>Upload a report</button>
+    <button class="navb" onclick="showScreen('patient','p-vault',this)"><svg class="ic"><use href="#i-folder"/></svg>All documents<span class="cnt">17</span></button>
+    <button class="navb" onclick="showScreen('patient','p-sharing',this)"><svg class="ic"><use href="#i-share"/></svg>Sharing<span class="cnt" id="p-req-cnt" style="background:var(--terracotta-soft);color:var(--terracotta-text)">1</span></button>
+    <div class="foot">Your records stay yours.<br>Clinics see only what you share.<br><button class="signout" onclick="logout()"><svg class="ic" style="width:14px;height:14px"><use href="#i-out"/></svg>Sign out</button></div>
+  </aside>
+
+  <main class="main">
+    <!-- Home -->
+    <section class="screen active" id="p-home">
+      <div class="head"><div class="grow"><h1>My health</h1><p class="sub">Each health problem is kept as its own episode, with its reports, prescriptions and what you shared.</p></div>
+        <div class="actions"><button class="btn" onclick="showScreen('patient','p-upload')"><svg class="ic"><use href="#i-upload"/></svg>Upload a report</button><button class="btn btn-primary" id="p-home-req" onclick="showScreen('patient','p-sharing');showTab(document.getElementById('ps-tab-req'),'ps-req')"><svg class="ic"><use href="#i-inbox"/></svg>1 clinic request</button></div></div>
+
+      <div class="notice warn" id="p-home-reqnote" style="margin-bottom:16px"><svg class="ic"><use href="#i-inbox"/></svg><span><b>Arogya Multispeciality</b> has assigned you to <b>Dr. Anjali Rao</b> and asked for a short intake before your visit. <a href="#" onclick="event.preventDefault();openRequest()">Answer now</a></span></div>
+      <div class="grid g-main">
+        <div class="stack" style="gap:16px">
+          <div>
+            <div class="label" style="margin-bottom:8px">Active</div>
+            <div class="card epi" onclick="showScreen('patient','p-episode')">
+              <div class="row" style="justify-content:space-between"><div class="et">Right knee pain</div><span class="chip warn">Ongoing · 6 days</span></div>
+              <div class="em">Started 28 Aug 2026 · seen today by Dr. Anjali Rao, Arogya Multispeciality</div>
+              <div class="ef"><span><b>3</b> documents</span><span><b>1</b> intake summary</span><span><b>Shared</b> with Arogya until 30 Sep</span></div>
+              <div class="notice ok" style="margin-top:12px"><svg class="ic"><use href="#i-check"/></svg><span>Dr. Rao uploaded a prescription at 09:48. <a href="#" onclick="event.preventDefault();showScreen('patient','p-episode')">Open it</a></span></div>
+            </div>
+          </div>
+          <div>
+            <div class="label" style="margin-bottom:8px">Resolved</div>
+            <div class="stack">
+              <div class="card epi"><div class="row" style="justify-content:space-between"><div class="et">Viral fever</div><span class="chip ok">Resolved · 21 Jul 2026</span></div><div class="em">12–21 Jul 2026 · City Care Clinic, Dr. R. Menon</div><div class="ef"><span><b>2</b> documents</span><span>Share with City Care <b>expired</b></span></div></div>
+              <div class="card epi"><div class="row" style="justify-content:space-between"><div class="et">Seasonal allergy</div><span class="chip ok">Resolved · Mar 2026</span></div><div class="em">Mar 2026 · self-managed</div><div class="ef"><span><b>1</b> document</span><span>Never shared</span></div></div>
+              <div class="card epi"><div class="row" style="justify-content:space-between"><div class="et">Annual health check</div><span class="chip plain">Closed · Jan 2026</span></div><div class="em">Jan 2026 · Metropolis Labs</div><div class="ef"><span><b>6</b> documents</span><span>Never shared</span></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="stack" style="gap:16px">
+          <div class="card"><div class="ch"><h3>Who can see what</h3><button class="btn btn-sm btn-ghost" onclick="showScreen('patient','p-sharing')">Manage</button></div><div class="cb stack" style="gap:10px">
+            <div><div class="row" style="justify-content:space-between"><b>Arogya Multispeciality</b><span class="chip ok">Active</span></div><div class="small muted">Right knee pain · intake + 2 reports · until 30 Sep 2026</div></div>
+            <div class="small faint">No other clinic or doctor can see your records.</div>
+          </div></div>
+          <div class="card"><div class="ch"><h3>Profile basics</h3><button class="btn btn-sm btn-ghost">Edit</button></div><div class="cb"><dl class="kv"><dt>Blood group</dt><dd>B+</dd><dt>Allergies</dt><dd>None known</dd><dt>Long-term conditions</dt><dd>None</dd><dt>Emergency contact</dt><dd>Neha Mehta · 98220 xxxxx</dd></dl><p class="small faint" style="margin-top:10px">Included automatically in every share.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Episode detail -->
+    <section class="screen" id="p-episode">
+      <div class="crumbs"><button onclick="showScreen('patient','p-home')">My health</button><span>/</span><span>Right knee pain</span></div>
+      <div class="head"><div class="grow"><h1>Right knee pain</h1><p class="sub">Started 28 Aug 2026 · ongoing</p></div>
+        <div class="actions"><button class="btn" onclick="showScreen('patient','p-upload')">Add document</button><button class="btn" onclick="openModal('m-share')">Share…</button><button class="btn btn-primary" onclick="toast('Marked as resolved. You can reopen it anytime.')">Mark resolved</button></div></div>
+      <div class="grid g-main">
+        <div class="stack" style="gap:16px">
+          <div class="card"><div class="ch"><h3>Documents in this episode</h3><span class="mono faint">3</span></div><div class="cb stack" style="gap:8px">
+            <div class="doc"><div class="th">RX</div><div><div class="dn">Prescription — Dr. Anjali Rao</div><div class="dm">Uploaded by doctor · today 09:48 · Arogya Multispeciality</div></div><div class="dr"><span class="chip accent">New</span><button class="btn btn-sm">Open</button></div></div>
+            <div class="doc"><div class="th img">X-R</div><div><div class="dn">X-ray right knee, AP and lateral</div><div class="dm">Imaging · Sahyadri Diagnostics · 30 Aug 2026 · you uploaded</div></div><div class="dr"><span class="chip plain">Shared</span><button class="btn btn-sm">Open</button></div></div>
+            <div class="doc"><div class="th">PDF</div><div><div class="dn">Uric acid and CBC</div><div class="dm">Lab report · Metropolis Labs · 29 Aug 2026 · you uploaded</div></div><div class="dr"><span class="chip plain">Shared</span><button class="btn btn-sm">Open</button></div></div>
+          </div></div>
+          <div class="card"><div class="ch"><h3>Intake history</h3><span class="mono faint">2 recorded</span><span class="chip plain">Stored in your record</span></div><div class="cb">
+            <ul class="tl" style="margin-bottom:-18px">
+              <li class="done"><div class="tt">Intake for Dr. Anjali Rao</div><div class="ts">Answered by speaking · sent with 2 reports</div><div class="tm">Today 09:05 · Arogya request</div></li>
+              <li class="done"><div class="tt">Intake at episode start</div><div class="ts">Answered by typing · shared with Arogya</div><div class="tm">28 Aug 2026</div></li>
+            </ul>
+            <p class="small faint" style="margin-top:14px"><svg class="ic" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"><use href="#i-lock"/></svg>Your answers are kept with this problem and shown to the doctor you send them to. Only intakes for this problem travel with it.</p></div></div>
+        </div>
+        <div class="stack" style="gap:16px">
+          <div class="card"><div class="ch"><h3>Timeline</h3></div><div class="cb"><ul class="tl">
+            <li class="now"><div class="tt">Prescription received</div><div class="ts">Dr. Anjali Rao · rest, ice, physiotherapy referral</div><div class="tm">Today 09:48</div></li>
+            <li class="done"><div class="tt">Seen at Arogya Multispeciality</div><div class="ts">Assigned to Dr. Rao, Orthopaedics</div><div class="tm">Today 09:10</div></li>
+            <li class="done"><div class="tt">Shared with Arogya</div><div class="ts">Intake + 2 reports · until 30 Sep</div><div class="tm">2 Sep 20:15</div></li>
+            <li class="done"><div class="tt">X-ray uploaded</div><div class="tm">30 Aug</div></li>
+            <li class="done"><div class="tt">Lab report uploaded</div><div class="tm">29 Aug</div></li>
+            <li class="done"><div class="tt">Symptom check completed</div><div class="ts">1 flag raised</div><div class="tm">28 Aug 21:40</div></li>
+            <li class="done"><div class="tt">Episode started</div><div class="tm">28 Aug</div></li>
+          </ul></div></div>
+          <div class="card"><div class="ch"><h3>Shared with</h3></div><div class="cb"><div class="row" style="justify-content:space-between"><b>Arogya Multispeciality</b><span class="chip ok">Active</span></div><div class="small muted">Intake, X-ray, lab report · until 30 Sep 2026</div><div class="row" style="margin-top:10px"><button class="btn btn-sm" onclick="openModal('m-share')">Change what is shared</button><button class="btn btn-sm btn-danger" onclick="toast('Access for Arogya Multispeciality revoked')">Revoke</button></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upload -->
+    <section class="screen" id="p-upload">
+      <div class="head"><div class="grow"><h1>Upload a report</h1><p class="sub">Photos of paper reports work fine. We keep the original and read the key values for you to confirm.</p></div></div>
+      <div class="grid g-main">
+        <div class="card"><div class="cb stack" style="gap:16px">
+          <div class="drop"><svg class="ic" style="width:28px;height:28px;color:var(--ink-3)"><use href="#i-upload"/></svg><div style="margin-top:8px"><b>Choose files</b> or drag them here</div><div class="small faint">PDF, JPG, PNG, HEIC · up to 25 MB each</div></div>
+          <div class="doc"><div class="th">PDF</div><div><div class="dn">MRI_knee_report.pdf</div><div class="dm">2.4 MB · uploaded</div><div class="prog" style="margin-top:6px;width:200px"><i style="width:100%"></i></div></div><div class="dr"><span class="chip ok">Ready</span></div></div>
+          <div class="grid g2">
+            <div class="field"><label class="req" for="upepi">Which problem is this for?</label><select id="upepi" class="input"><option>Right knee pain (ongoing)</option><option>Viral fever (resolved)</option><option>Seasonal allergy (resolved)</option><option>Annual health check</option><option>— Start a new episode —</option></select><span class="hint">Keeps this report with the right problem so you can share just that folder later.</span></div>
+            <div class="field"><label class="req" for="uptype">Document type</label><select id="uptype" class="input"><option>Imaging report (MRI)</option><option>Lab report</option><option>Prescription</option><option>Discharge summary</option><option>Doctor's letter</option><option>Other</option></select></div>
+            <div class="field"><label class="req" for="update">Date on the report</label><input id="update" class="input" type="date" value="2026-09-02"></div>
+            <div class="field"><label for="upfrom">Issued by</label><input id="upfrom" class="input" value="Sahyadri Diagnostics, Pune"></div>
+          </div>
+          <div class="card" style="background:var(--surface-2)"><div class="cb"><div class="label" style="margin-bottom:8px">We read these values · please confirm</div><dl class="kv"><dt>Finding</dt><dd>Grade 2 medial meniscus signal, no tear</dd><dt>Effusion</dt><dd>Mild</dd><dt>Reported by</dt><dd>Dr. S. Patil, Radiologist</dd></dl></div></div>
+          <div class="row" style="justify-content:flex-end"><button class="btn btn-ghost">Cancel</button><button class="btn btn-primary" onclick="toast('Saved to Right knee pain. Not shared with anyone yet.')">Save to episode</button></div>
+        </div></div>
+        <div class="stack">
+          <div class="notice plain"><svg class="ic"><use href="#i-lock"/></svg><span>Uploading never shares. A document becomes visible to a clinic only when you include it in a share.</span></div>
+          <div class="card"><div class="ch"><h3>Tips for photos</h3></div><div class="cb small muted stack" style="gap:6px"><span>Lay the page flat, avoid shadows.</span><span>Include the lab name and date at the top.</span><span>Multi-page reports: upload all pages together.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Intake (opened from a clinic request) -->
+    <section class="screen" id="p-intake">
+      <div class="head"><div class="grow"><div class="crumbs"><button onclick="showScreen('patient','p-sharing')">Sharing</button><span>/</span><span>Request from Arogya</span></div><h1>Intake for Dr. Anjali Rao</h1><p class="sub">Arogya Multispeciality asked a few questions before your visit. Not a diagnosis. Sent only when you press Send.</p></div><div class="actions"><button class="btn btn-ghost" onclick="showScreen('patient','p-sharing')">Save and exit</button></div></div>
+      <div class="onb">
+        <div class="row" style="justify-content:space-between;margin-bottom:8px"><span class="small muted">Step <span id="qs-n" class="mono">1</span> of <span id="qs-max" class="mono">7</span></span><span class="small faint" id="qs-title"></span></div>
+        <div class="prog" style="margin-bottom:18px"><i id="qs-bar" style="width:14%"></i></div>
+        <div class="card">
+          <div class="cb" id="qs-body"></div>
+          <div class="mf"><button class="btn btn-ghost" id="qs-back" onclick="qStep(-1)" disabled>Back</button><span style="flex:1"></span><button class="btn btn-primary" id="qs-next" onclick="qStep(1)">Continue</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Vault -->
+    <section class="screen" id="p-vault">
+      <div class="head"><div class="grow"><h1>All documents</h1><p class="sub">17 documents across 4 episodes. Grouped by episode so nothing gets mixed up.</p></div>
+        <div class="actions"><div class="search"><svg class="ic" style="width:16px;height:16px"><use href="#i-search"/></svg><input placeholder="Search by name, lab or value" aria-label="Search documents"></div><button class="btn btn-primary" onclick="showScreen('patient','p-upload')">Upload</button></div></div>
+      <div class="stack" style="gap:16px">
+        <div class="card"><div class="ch"><h3>Right knee pain</h3><span class="chip warn">Ongoing</span><span class="faint small">3 documents</span></div><div class="cb">
+          <div class="doc-row"><div><b>Prescription — Dr. Anjali Rao</b><div class="small muted">Arogya Multispeciality</div></div><span class="mono small">03 Sep 2026</span><span class="tag">Prescription</span><span class="small muted">Shared: Arogya</span></div>
+          <div class="doc-row"><div><b>X-ray right knee</b><div class="small muted">Sahyadri Diagnostics</div></div><span class="mono small">30 Aug 2026</span><span class="tag">Imaging</span><span class="small muted">Shared: Arogya</span></div>
+          <div class="doc-row"><div><b>Uric acid and CBC</b><div class="small muted">Metropolis Labs</div></div><span class="mono small">29 Aug 2026</span><span class="tag">Lab</span><span class="small muted">Shared: Arogya</span></div>
+        </div></div>
+        <div class="card"><div class="ch"><h3>Viral fever</h3><span class="chip ok">Resolved</span><span class="faint small">2 documents</span></div><div class="cb">
+          <div class="doc-row"><div><b>Prescription — Dr. R. Menon</b><div class="small muted">City Care Clinic</div></div><span class="mono small">14 Jul 2026</span><span class="tag">Prescription</span><span class="small muted">Share expired</span></div>
+          <div class="doc-row"><div><b>Dengue NS1, CBC</b><div class="small muted">Thyrocare</div></div><span class="mono small">13 Jul 2026</span><span class="tag">Lab</span><span class="small muted">Share expired</span></div>
+        </div></div>
+        <div class="card"><div class="ch"><h3>Annual health check</h3><span class="chip plain">Closed</span><span class="faint small">6 documents</span><button class="btn btn-sm btn-ghost">Show</button></div></div>
+        <div class="card"><div class="ch"><h3>Seasonal allergy</h3><span class="chip ok">Resolved</span><span class="faint small">1 document</span><button class="btn btn-sm btn-ghost">Show</button></div></div>
+      </div>
+    </section>
+
+    <!-- Sharing -->
+    <section class="screen" id="p-sharing">
+      <div class="head"><div class="grow"><h1>Sharing</h1><p class="sub">Clinics ask; you decide. Every share names the episode, the exact items and how long. Revoke any time.</p></div>
+        <div class="actions"><button class="btn btn-primary" onclick="openModal('m-share')"><svg class="ic"><use href="#i-share"/></svg>Share with a clinic</button></div></div>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" id="ps-tab-req" aria-selected="true" onclick="showTab(this,'ps-req')"><svg class="ic" style="width:15px;height:15px;vertical-align:-3px;margin-right:6px"><use href="#i-inbox"/></svg>Requests<span class="cnt" id="ps-req-cnt">1</span></button>
+        <button class="tab" role="tab" aria-selected="false" onclick="showTab(this,'ps-active')">Active shares<span class="cnt">1</span></button>
+        <button class="tab" role="tab" aria-selected="false" onclick="showTab(this,'ps-ended')">Ended<span class="cnt">1</span></button>
+        <button class="tab" role="tab" aria-selected="false" onclick="showTab(this,'ps-log')">Access log</button>
+      </div>
+      <div>
+        <div class="tabpane active" id="ps-req">
+          <div class="stack" style="gap:12px">
+            <div class="card perm" id="req-arogya" style="border-left:3px solid var(--terracotta)">
+              <div class="avatar" style="background:var(--clinic)">AM</div>
+              <div class="pc"><div class="pn">Arogya Multispeciality Clinic, Pune <span class="chip accent" style="margin-left:6px">New</span></div>
+                <div class="pm">Front desk assigned you to <b>Dr. Anjali Rao</b> (Orthopaedics) for <b>Right knee pain</b> · today 09:05 · visit today</div>
+                <div class="pm" style="margin-top:6px">They ask for: a short intake (answer by speaking or typing) and any previous reports you want the doctor to see.</div>
+                <div class="pi"><span class="tag">Intake questions</span><span class="tag">Previous reports (optional)</span><span class="tag">Profile basics</span></div></div>
+              <div class="actions" id="req-arogya-actions"><button class="btn btn-sm btn-ghost" onclick="toast('Request declined. Arogya has been told.')">Decline</button><button class="btn btn-sm btn-primary" onclick="openRequest()">Open request</button></div>
+            </div>
+            <div class="empty hidden" id="req-empty"><svg class="ic"><use href="#i-inbox"/></svg><h4>No open requests</h4><p class="small">When a clinic assigns you to a doctor, their request appears here.</p></div>
+            <div class="notice plain"><svg class="ic"><use href="#i-lock"/></svg><span>Opening a request shares nothing. The clinic sees your answers and reports only after you press Send on the last step.</span></div>
+          </div>
+        </div>
+        <div class="tabpane" id="ps-active">
+          <div class="stack" style="gap:12px" id="ps-active-list">
+            <div class="card perm"><div class="avatar" style="background:var(--clinic)">AM</div><div class="pc"><div class="pn">Arogya Multispeciality Clinic, Pune</div><div class="pm">Episode: <b>Right knee pain</b> · shared 2 Sep · ends 30 Sep 2026 · opened by Dr. Anjali Rao today 09:12</div><div class="pi"><span class="tag">X-ray right knee</span><span class="tag">Uric acid and CBC</span><span class="tag">Profile basics</span></div></div><div class="actions"><button class="btn btn-sm" onclick="openModal('m-share')">Edit</button><button class="btn btn-sm btn-danger" onclick="toast('Access for Arogya Multispeciality revoked')">Revoke</button></div></div>
+          </div>
+        </div>
+        <div class="tabpane" id="ps-ended">
+          <div class="card perm" style="opacity:.8"><div class="avatar" style="background:var(--ink-3)">CC</div><div class="pc"><div class="pn">City Care Clinic, Kothrud</div><div class="pm">Episode: <b>Viral fever</b> · 12–21 Jul 2026 · expired at end of episode</div><div class="pi"><span class="tag">Intake summary</span><span class="tag">Dengue NS1, CBC</span></div></div><div class="actions"><button class="btn btn-sm btn-ghost">Share again</button></div></div>
+        </div>
+        <div class="tabpane" id="ps-log">
+          <div class="card"><div class="ch"><h3>Access log</h3><span class="faint small">who opened what</span></div><div class="cb"><ul class="tl" style="margin-bottom:-18px" id="ps-log-list">
+            <li class="done"><div class="tt">Dr. Anjali Rao opened X-ray right knee</div><div class="tm">Today 09:14 · Arogya</div></li>
+            <li class="done"><div class="tt">Dr. Anjali Rao opened intake summary</div><div class="tm">Today 09:12 · Arogya</div></li>
+            <li class="done"><div class="tt">Front desk (Priya D.) viewed share summary</div><div class="tm">Today 09:08 · Arogya</div></li>
+            <li class="done"><div class="tt">You shared Right knee pain with Arogya</div><div class="tm">2 Sep 20:15</div></li>
+          </ul></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<!-- ================= MODALS ================= -->
+<div class="scrim" id="scrim" onclick="if(event.target===this)closeModal()">
+
+  <div class="modal hidden" id="m-arrive" role="dialog" aria-modal="true" aria-labelledby="m-arrive-t">
+    <div class="mh"><div><h2 id="m-arrive-t">Patient arrived</h2><p class="muted small">Find the patient's share. If they have not shared yet, ask them to do it from their Nidaan app or scan the clinic QR at the desk.</p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
+    <div class="mb stack" style="gap:14px">
+      <div class="search"><svg class="ic" style="width:16px;height:16px"><use href="#i-search"/></svg><input value="9822" aria-label="Search by phone or Nidaan ID"></div>
+      <div class="stack" style="gap:8px">
+        <div class="doctor-pick"><input type="radio" name="arrive" checked><div><div class="dn">Rohan Mehta <span class="muted" style="font-weight:400">34 M</span></div><div class="ds">98220 xxxxx · <span class="mono">NID-2041-7783</span> · shared Right knee pain until 30 Sep</div></div><div class="dl"><span class="chip ok">Active share</span></div></div>
+        <div class="doctor-pick" style="opacity:.7"><input type="radio" name="arrive"><div><div class="dn">Rekha Mehta <span class="muted" style="font-weight:400">62 F</span></div><div class="ds">98221 xxxxx · <span class="mono">NID-6610-0034</span></div></div><div class="dl"><span class="chip warn">No active share</span></div></div>
+      </div>
+      <div class="notice plain"><svg class="ic"><use href="#i-info"/></svg><span>Patients without an active share can still be seen; the doctor will just not have any records or intake from Nidaan.</span></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="closeModal();toast('Rohan Mehta added to queue without records')">Add without records</button><button class="btn btn-primary" onclick="closeModal();openAssign('Rohan Mehta','Right knee pain · 1 flag','Orthopaedics')">Add to queue and assign</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-assign" role="dialog" aria-modal="true" aria-labelledby="m-assign-t">
+    <div class="mh"><div><h2 id="m-assign-t">Assign a doctor</h2><p class="muted small"><b id="as-name">Sunita Pawar</b> · <span id="as-cc">Chest discomfort on exertion · 3 red flags</span></p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
+    <div class="mb stack" style="gap:14px">
+      <div class="row" style="justify-content:space-between"><span class="label">Suggested: <span id="as-spec">GP</span></span><div class="seg"><button aria-pressed="true">On duty</button><button aria-pressed="false">All doctors</button></div></div>
+      <div class="stack" style="gap:8px" id="as-list">
+        <label class="doctor-pick"><input type="radio" name="asdoc" checked><div><div class="dn">Dr. Vikram Sethi</div><div class="ds">General physician · on duty until 17:00</div></div><div class="dl">Waiting<b>2</b></div></label>
+        <label class="doctor-pick"><input type="radio" name="asdoc"><div><div class="dn">Dr. Sameer Kulkarni</div><div class="ds">Cardiology · on duty until 15:00</div></div><div class="dl">Waiting<b>0</b></div></label>
+        <label class="doctor-pick"><input type="radio" name="asdoc"><div><div class="dn">Dr. Anjali Rao</div><div class="ds">Orthopaedics · on duty until 14:00</div></div><div class="dl">Waiting<b>0</b></div></label>
+        <label class="doctor-pick"><input type="radio" name="asdoc"><div><div class="dn">Dr. Meera Iyer</div><div class="ds">Dermatology · on duty until 13:30</div></div><div class="dl">Waiting<b>0</b></div></label>
+      </div>
+      <div class="field"><label for="as-note">Note for the doctor <span class="faint" style="font-weight:400">(optional)</span></label><input id="as-note" class="input" placeholder="e.g. Patient is anxious, prefers Marathi"></div>
+      <div class="notice info"><svg class="ic"><use href="#i-info"/></svg><span>The doctor will see the patient's shared intake and documents the moment you assign. You will not; the front desk only sees the share summary.</span></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="doAssign()">Assign and notify doctor</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-shared" role="dialog" aria-modal="true" aria-labelledby="m-shared-t">
+    <div class="mh"><div><h2 id="m-shared-t">Share summary</h2><p class="muted small">What the front desk can see. Contents open only for the assigned doctor.</p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
+    <div class="mb">
+      <dl class="kv"><dt>Patient</dt><dd>Sunita Pawar · 58 F · <span class="mono">NID-1187-2290</span></dd><dt>Episode</dt><dd>Chest discomfort on exertion</dd><dt>Intake</dt><dd><span class="chip crit">3 red flags</span> <span class="chip warn">1 caution</span> · completed today 08:51</dd><dt>Documents</dt><dd>HbA1c (Jun 2026) · Lipid profile (Jun 2026) · Resting ECG (Aug 2025)</dd><dt>Also included</dt><dd>Current medicines, allergies, emergency contact</dd><dt>Access ends</dt><dd>10 Sep 2026, or earlier if the patient revokes</dd></dl>
+      <div class="notice plain" style="margin-top:14px"><svg class="ic"><use href="#i-lock"/></svg><span>Document contents and questionnaire answers are hidden from front-desk staff by design.</span></div>
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal()">Close</button><button class="btn btn-primary" onclick="closeModal();openAssign('Sunita Pawar','Chest discomfort on exertion · 3 red flags','GP')">Assign doctor</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-adddoc" role="dialog" aria-modal="true" aria-labelledby="m-adddoc-t">
+    <div class="mh"><div><h2 id="m-adddoc-t">Add a doctor</h2><p class="muted small">They get an email invite and their own login. Assign patients only after they accept.</p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
+    <div class="mb grid g2">
+      <div class="field"><label class="req">Full name</label><input class="input" placeholder="Dr. "></div>
+      <div class="field"><label class="req">Specialty</label><select class="input"><option>General physician</option><option>Orthopaedics</option><option>Cardiology</option><option>Dermatology</option><option>ENT</option><option>Paediatrics</option><option>Gynaecology</option></select></div>
+      <div class="field"><label class="req">Medical council registration</label><input class="input" placeholder="MMC 20xx/xxxxx"><span class="hint">Verified against the NMC register.</span></div>
+      <div class="field"><label class="req">Email</label><input class="input" type="email" placeholder="name@arogya.clinic"></div>
+      <div class="field" style="grid-column:1/-1"><label>Usual hours</label><div class="row"><input class="input" type="time" value="09:00" style="width:130px"><span class="muted">to</span><input class="input" type="time" value="17:00" style="width:130px"><span class="muted small">Mon–Sat</span></div></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="closeModal();toast('Invite sent')">Send invite</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-share" role="dialog" aria-modal="true" aria-labelledby="m-share-t">
+    <div class="mh"><div><h2 id="m-share-t">Share with a clinic</h2><p class="muted small">Choose exactly what they can see and for how long.</p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
+    <div class="mb stack" style="gap:16px">
+      <div class="field"><label class="req">Clinic</label><select class="input"><option>Arogya Multispeciality Clinic, Deccan Gymkhana, Pune</option><option>City Care Clinic, Kothrud</option><option>Search other clinics…</option></select><span class="hint">Or scan the QR code at the clinic desk.</span></div>
+      <div class="field"><label class="req">Which problem?</label><select class="input"><option>Right knee pain (ongoing)</option><option>Viral fever (resolved)</option><option>Seasonal allergy (resolved)</option><option>Annual health check</option></select></div>
+      <div class="field"><label>Include</label>
+        <div class="opts">
+          <label class="check"><input type="checkbox" checked><div><div class="t">Intake summary</div><div class="s">Your symptom-check answers and flags · 28 Aug</div></div></label>
+          <label class="check"><input type="checkbox" checked><div><div class="t">X-ray right knee</div><div class="s">Sahyadri Diagnostics · 30 Aug</div></div></label>
+          <label class="check"><input type="checkbox" checked><div><div class="t">Uric acid and CBC</div><div class="s">Metropolis Labs · 29 Aug</div></div></label>
+          <label class="check"><input type="checkbox"><div><div class="t">Prescription — Dr. Anjali Rao</div><div class="s">3 Sep · from this clinic</div></div></label>
+          <label class="check"><input type="checkbox" checked><div><div class="t">Profile basics</div><div class="s">Blood group, allergies, long-term conditions, emergency contact</div></div></label>
+        </div>
+        <span class="hint">Documents from other episodes are never included unless you add them here.</span></div>
+      <div class="field"><label class="req">For how long?</label>
+        <div class="opts" style="grid-template-columns:repeat(3,1fr)">
+          <label class="opt"><input type="radio" name="dur">This visit only</label>
+          <label class="opt"><input type="radio" name="dur" checked>30 days</label>
+          <label class="opt"><input type="radio" name="dur">Until I revoke</label>
+        </div></div>
+      <div class="notice plain"><svg class="ic"><use href="#i-lock"/></svg><span>The clinic can assign any of its doctors to see this. You will see who opened what in your access log, and you can revoke at any moment.</span></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="closeModal();toast('Shared Right knee pain with Arogya Multispeciality for 30 days')">Share 4 items</button></div>
+  </div>
+
+  <div class="modal hidden" id="m-prev-intake" role="dialog" aria-modal="true" aria-labelledby="m-prev-t" style="width:min(760px,100%)">
+    <div class="mh"><div><h2 id="m-prev-t">Previous intake summaries</h2><p class="muted small">Sunita Pawar · <b>Chest discomfort on exertion</b> episode only. Intakes from her other problems are not part of this share.</p></div><button class="xbtn" onclick="closeModal()" aria-label="Close">×</button></div>
+    <div class="mb stack" style="gap:12px">
+      <div class="notice plain"><svg class="ic"><use href="#i-info"/></svg><span>Read-only. The current intake on the main screen is what the patient sent for today. These are earlier answers attached to the same episode, useful to see how symptoms changed.</span></div>
+
+      <details class="card" open>
+        <summary class="ch" style="cursor:pointer;list-style:none"><div style="flex:1"><h3 style="display:inline">31 Aug 2026 · 19:20</h3><div class="small muted">Answered by typing · 12 answers · sent to Arogya front desk (not yet assigned)</div></div><span class="chip warn">2 flags</span></summary>
+        <div class="cb">
+          <dl class="kv">
+            <dt>Main problem</dt><dd>Chest tightness when walking fast</dd>
+            <dt>Since</dt><dd>3 days · gradual</dd>
+            <dt>Severity</dt><dd><span class="mono">4/10</span> during activity · <span class="mono">0/10</span> at rest</dd>
+            <dt>Triggers</dt><dd>Walking fast, climbing stairs</dd>
+            <dt>Relieved by</dt><dd>Rest within 10 minutes</dd>
+            <dt>Associated</dt><dd>Mild breathlessness. No sweating, no arm pain.</dd>
+            <dt>Self-recorded</dt><dd>BP <span class="mono">144/90</span> (home)</dd>
+            <dt>Flags</dt><dd><span class="chip warn">Exertional</span> <span class="chip warn">Diabetic</span></dd>
+          </dl>
+          <div class="notice info" style="margin-top:12px"><svg class="ic"><use href="#i-info"/></svg><span>Compared with today: severity up from 4 to 6/10, new left-arm radiation, new sweating episode.</span></div>
+        </div>
+      </details>
+
+      <details class="card">
+        <summary class="ch" style="cursor:pointer;list-style:none"><div style="flex:1"><h3 style="display:inline">28 Aug 2026 · 08:30</h3><div class="small muted">Answered by speaking · 9 answers · episode opened by patient, not shared at the time</div></div><span class="chip plain">No flags</span></summary>
+        <div class="cb">
+          <dl class="kv">
+            <dt>Main problem</dt><dd>“Heaviness in the chest after climbing to the second floor”</dd>
+            <dt>Since</dt><dd>Started yesterday</dd>
+            <dt>Severity</dt><dd><span class="mono">3/10</span></dd>
+            <dt>Triggers</dt><dd>Stairs only</dd>
+            <dt>Associated</dt><dd>None reported</dd>
+            <dt>Urgent signs</dt><dd>None</dd>
+          </dl>
+        </div>
+      </details>
+
+      <p class="small faint">Other episodes in this patient's record (Diabetes review, earlier problems) have their own intakes. They are not visible here unless the patient shares that episode.</p>
+    </div>
+    <div class="mf"><button class="btn btn-primary" onclick="closeModal()">Back to current intake</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><svg class="ic"><use href="#i-check"/></svg><span id="toast-t"></span></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
