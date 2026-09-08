@@ -22,7 +22,15 @@ app.use(express.json({ limit: '2mb' }));
 
 app.post('/api/login', login);
 app.get('/api/me', auth(), (req, res) => res.json(req.user));
-app.get('/api/health', (_req, res) => res.json({ ok: true, model: MODEL, ocr: ocr.hasSystemTesseract ? 'tesseract' : 'tesseract.js', gemini: !!process.env.GEMINI_API_KEY }));
+app.get('/api/health', async (req, res) => {
+  const key = process.env.GEMINI_API_KEY || '';
+  const out = { ok: true, model: MODEL, ocr: ocr.hasSystemTesseract ? 'tesseract' : 'tesseract.js', gemini: !!key, key_preview: key ? key.slice(0, 5) + '…' + key.slice(-4) + ' (' + key.length + ' chars)' : 'MISSING' };
+  if (req.query.check === 'gemini') {           /* live round-trip so a broken key/model shows its real error */
+    try { const t0 = Date.now(); const r = await require('./gemini').generate({ parts: [{ text: 'Reply with JSON {"ok":true}' }], temperature: 0 }); out.gemini_test = { ok: !!r.ok, ms: Date.now() - t0 }; }
+    catch (e) { out.gemini_test = { ok: false, error: e.message }; }
+  }
+  res.json(out);
+});
 
 app.use('/api/patient', require('./routes/patient'));
 app.use('/api/intake', require('./routes/intake'));
