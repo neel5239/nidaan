@@ -20,7 +20,7 @@ async function callModel(model, body) {
 }
 
 async function generate({ system, parts, json = true, temperature = 0.4 }) {
-  if (!KEY) throw new Error('GEMINI_API_KEY missing in .env');
+  if (!KEY) throw new Error('GEMINI_API_KEY is not set. Add it to .env locally, or as a Variable on the host (Railway: service → Variables → Deploy).');
   const body = {
     contents: [{ role: 'user', parts }],
     generationConfig: { temperature, ...(json ? { responseMimeType: 'application/json' } : {}) }
