@@ -34,14 +34,14 @@ button{font:inherit;color:inherit}
 .hidden{display:none!important}
 
 /* ---------- prototype chrome ---------- */
-.proto-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:16px;padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.proto-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:16px;padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:nowrap}
 .wordmark{font-family:var(--serif);font-style:italic;font-size:22px;letter-spacing:-.01em;color:var(--ink);display:flex;align-items:center;gap:8px}
 .wordmark .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block}
 .roles{display:flex;gap:4px;background:var(--surface-2);padding:4px;border-radius:999px;margin-left:auto}
 .role{border:0;background:transparent;padding:6px 14px;border-radius:999px;font-weight:600;cursor:pointer;color:var(--ink-2);display:flex;align-items:center;gap:8px}
 .role .sw{width:8px;height:8px;border-radius:50%;display:inline-block}
 .role[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
-.proto-note{width:100%;font-size:12.5px;color:var(--ink-2);margin:-2px 0 0}
+.proto-note{flex:1 1 auto;min-width:0;font-size:12.5px;color:var(--ink-2);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media(min-width:900px){.proto-note{width:auto;margin:0}}
 
 /* ---------- app shell ---------- */
@@ -82,6 +82,8 @@ button{font:inherit;color:inherit}
   .side .foot,.side .nav-group{display:none}
   .navb{white-space:nowrap;padding:8px 12px}
   .main{padding:16px 14px 48px}
+  .proto-bar{flex-wrap:wrap;gap:10px 14px}
+  .proto-note{width:100%;flex-basis:100%;white-space:normal;order:9}
 }
 
 /* ---------- primitives ---------- */
