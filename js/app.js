@@ -19,7 +19,8 @@
   var toastTimer;
   window.toast = function (msg, kind) {
     var t = $('toast'); $('toast-t').textContent = msg;
-    t.style.background = kind === 'err' ? 'var(--crit)' : '';
+    t.classList.toggle('err', kind === 'err');
+    $('toast-ic').setAttribute('href', kind === 'err' ? '#i-alert' : '#i-check');
     t.classList.add('show'); clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { t.classList.remove('show'); }, kind === 'err' ? 4200 : 2600);
   };
