@@ -70,10 +70,16 @@ button{font:inherit;color:inherit}
 .head .sub{color:var(--ink-2);margin-top:4px}
 .actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
-@media(max-width:899px){
+/* Sidebar with profile stays on laptops and tablets in landscape; below 760px it becomes a top bar
+   that still shows the signed-in profile (avatar + name) before the nav buttons. */
+@media(max-width:759px){
   .portal.active{grid-template-columns:1fr}
-  .side{position:static;height:auto;flex-direction:row;overflow-x:auto;gap:2px;padding:8px 10px;border-right:0;border-bottom:1px solid var(--line)}
-  .side .who,.side .foot,.side .nav-group{display:none}
+  .side{position:static;height:auto;flex-direction:row;overflow-x:auto;gap:2px;padding:8px 10px;border-right:0;border-bottom:1px solid var(--line);align-items:center}
+  .side .who{flex:none;padding:4px 10px 4px 2px;margin:0 6px 0 0;border-bottom:0;border-right:1px solid var(--line-2)}
+  .side .who .avatar{width:30px;height:30px;font-size:12px}
+  .side .who .name{white-space:nowrap}
+  .side .who .sub{white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis}
+  .side .foot,.side .nav-group{display:none}
   .navb{white-space:nowrap;padding:8px 12px}
   .main{padding:16px 14px 48px}
 }
