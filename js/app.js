@@ -234,7 +234,7 @@
   }
   function daysSince(s) { var d = parseTs(s); var n = Math.floor((Date.now() - d) / 86400000); return n <= 0 ? 'today' : n + (n === 1 ? ' day' : ' days'); }
   function kvProfile(p) {
-    return '<dl class="kv"><dt>Blood group</dt><dd>' + esc(p.blood_group || '—') + '</dd><dt>Allergies</dt><dd>' + esc(p.allergies || 'None recorded') + '</dd><dt>Long-term conditions</dt><dd>' + esc(p.conditions || 'None recorded') + '</dd><dt>Regular medicines</dt><dd>' + esc(p.medicines || 'None recorded') + '</dd><dt>Emergency contact</dt><dd>' + esc(p.emergency_contact || '—') + '</dd></dl><p class="small faint" style="margin-top:10px">Included automatically in every share.</p>';
+    return '<dl class="kv"><dt>Nidaan ID</dt><dd><span class="mono">' + esc(p.nid || '—') + '</span> <span class="small faint">· give this at the clinic front desk</span></dd><dt>Blood group</dt><dd>' + esc(p.blood_group || '—') + '</dd><dt>Allergies</dt><dd>' + esc(p.allergies || 'None recorded') + '</dd><dt>Long-term conditions</dt><dd>' + esc(p.conditions || 'None recorded') + '</dd><dt>Regular medicines</dt><dd>' + esc(p.medicines || 'None recorded') + '</dd><dt>Emergency contact</dt><dd>' + esc(p.emergency_contact || '—') + '</dd></dl><p class="small faint" style="margin-top:10px">Included automatically in every share.</p>';
   }
   loaders['p-home'] = function () {
     api('GET', '/patient/home').then(function (h) {
@@ -778,16 +778,16 @@
   }
   /* patient arrived */
   var AR = { patient: null, timer: null };
-  window.openArrive = function () { AR.patient = null; $('ar-search').value = ''; $('ar-note').value = ''; $('ar-results').innerHTML = '<div class="small faint">Type at least 3 characters.</div>'; $('ar-add').disabled = true; $('ar-assign').disabled = true; openModal('m-arrive'); };
+  window.openArrive = function () { AR.patient = null; $('ar-search').value = ''; $('ar-note').value = ''; $('ar-results').innerHTML = '<div class="small faint">Loading registered patients…</div>'; $('ar-add').disabled = true; $('ar-assign').disabled = true; openModal('m-arrive'); arriveSearch(''); };
   window.arriveSearch = function (v) {
     clearTimeout(AR.timer); AR.patient = null; $('ar-add').disabled = true; $('ar-assign').disabled = true;
-    if (v.trim().length < 3) { $('ar-results').innerHTML = '<div class="small faint">Type at least 3 characters.</div>'; return; }
     AR.timer = setTimeout(function () {
       api('GET', '/clinic/patients/search?q=' + encodeURIComponent(v.trim())).then(function (rows) {
         AR.rows = rows;
-        $('ar-results').innerHTML = rows.length ? rows.map(function (p, i) { return '<label class="doctor-pick"><input type="radio" name="arrive" onchange="arrivePick(' + i + ')"><div><div class="dn">' + esc(p.name) + ' <span class="muted" style="font-weight:400">' + esc((p.age || '') + ' ' + (p.sex || '')) + '</span></div><div class="ds">' + esc(p.phone || '') + ' · <span class="mono">' + esc(p.nid) + '</span>' + (p.active_share ? ' · shared ' + esc(p.active_share.episode || 'an episode') : '') + '</div></div><div class="dl">' + (p.active_share ? '<span class="chip ok">Active share</span>' : p.pending_request ? '<span class="chip warn">Request pending</span>' : '<span class="chip warn">No active share</span>') + '</div></label>'; }).join('') : '<div class="small muted">No patient found. They need a Nidaan account.</div>';
+        var head = '<div class="label" style="margin:2px 0 4px">' + (v.trim() ? plural(rows.length, 'match') : 'All registered patients · ' + rows.length + ' · newest first') + '</div>';
+        $('ar-results').innerHTML = head + (rows.length ? rows.map(function (p, i) { return '<label class="doctor-pick"><input type="radio" name="arrive" onchange="arrivePick(' + i + ')"><div><div class="dn">' + esc(p.name) + ' <span class="muted" style="font-weight:400">' + esc((p.age || '') + ' ' + (p.sex || '')) + '</span></div><div class="ds"><span class="mono">' + esc(p.nid) + '</span>' + (p.phone ? ' · ' + esc(p.phone) : '') + (p.active_share ? ' · shared ' + esc(p.active_share.episode || 'an episode') : '') + '</div></div><div class="dl">' + (p.active_share ? '<span class="chip ok">Active share</span>' : p.pending_request ? '<span class="chip warn">Request pending</span>' : '<span class="chip plain">Registered</span>') + '</div></label>'; }).join('') : '<div class="small muted">No patient found. Ask them to create a Nidaan account (login page → New here?).</div>');
       }).catch(fail);
-    }, 250);
+    }, v.trim() ? 250 : 0);
   };
   window.arrivePick = function (i) { AR.patient = AR.rows[i]; $('ar-add').disabled = false; $('ar-assign').disabled = false; };
   window.arriveAdd = function (assign) {

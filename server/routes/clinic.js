@@ -46,9 +46,12 @@ r.get('/today', (req, res) => {
 
 /* Front desk looks a patient up by Nidaan ID, email, phone or name. */
 r.get('/patients/search', (req, res) => {
-  const s = '%' + String(req.query.q || '').trim() + '%';
-  if (s.length < 4) return res.json([]);
-  const rows = q.all(`SELECT p.*, u.name, u.email FROM patients p JOIN users u ON u.id=p.user_id WHERE u.name LIKE ? OR p.nid LIKE ? OR u.email LIKE ? OR p.phone LIKE ? LIMIT 8`, s, s, s, s);
+  /* empty query = every registered patient (newest first); otherwise match Nidaan ID, name, email or phone */
+  const term = String(req.query.q || '').trim();
+  const s = '%' + term + '%';
+  const rows = term
+    ? q.all(`SELECT p.*, u.name, u.email FROM patients p JOIN users u ON u.id=p.user_id WHERE u.name LIKE ? OR p.nid LIKE ? OR REPLACE(p.nid,'-','') LIKE ? OR u.email LIKE ? OR p.phone LIKE ? ORDER BY u.id DESC LIMIT 30`, s, s, '%' + term.replace(/-/g, '') + '%', s, s)
+    : q.all(`SELECT p.*, u.name, u.email FROM patients p JOIN users u ON u.id=p.user_id ORDER BY u.id DESC LIMIT 50`);
   res.json(rows.map(p => {
     const sh = q.get(`SELECT s.*, e.title FROM shares s LEFT JOIN episodes e ON e.id=s.episode_id WHERE s.patient_id=? AND s.clinic_id=? AND s.status='active' ORDER BY s.id DESC LIMIT 1`, p.id, req.cid);
     const pend = q.get(`SELECT id FROM requests WHERE patient_id=? AND clinic_id=? AND status='pending'`, p.id, req.cid);

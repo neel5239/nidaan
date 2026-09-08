@@ -390,8 +390,8 @@
   <div class="modal hidden" id="m-arrive" role="dialog" aria-modal="true" aria-labelledby="m-arrive-t">
     <div class="mh"><div><h2 id="m-arrive-t">Patient arrived</h2><p class="muted small">Find the patient by name, Nidaan ID, phone or email. Adding them to the queue sends an intake request to their Nidaan app.</p></div><button class="xbtn" aria-label="Close" onclick="closeModal()">×</button></div>
     <div class="mb stack" style="gap:14px">
-      <div class="search"><svg class="ic" style="width:16px;height:16px"><use href="#i-search"/></svg><input id="ar-search" placeholder="Search by name, phone, email or Nidaan ID" aria-label="Search patients" oninput="arriveSearch(this.value)"></div>
-      <div class="stack" style="gap:8px" id="ar-results"><div class="small faint">Type at least 3 characters.</div></div>
+      <div class="search"><svg class="ic" style="width:16px;height:16px"><use href="#i-search"/></svg><input id="ar-search" placeholder="Nidaan ID (e.g. NID-2041-7783), name, phone or email" aria-label="Search patients" oninput="arriveSearch(this.value)"></div>
+      <div class="stack" style="gap:8px;max-height:46vh;overflow:auto" id="ar-results"></div>
       <div class="field"><label for="ar-note">Note for the doctor <span class="faint" style="font-weight:400">(optional)</span></label><input id="ar-note" class="input" placeholder="e.g. Patient is anxious, prefers Marathi"></div>
       <div class="notice plain"><svg class="ic"><use href="#i-info"/></svg><span>Patients without an active share can still be seen; the doctor will just not have any records or intake from Nidaan until the patient answers the request.</span></div>
     </div>
