@@ -70,6 +70,19 @@ Patients can also start a share themselves (*Share with a clinic*); it appears u
 until the front desk accepts it into the queue. Reports can be uploaded any time from *Upload a report*; the OCR
 result ("We read these values") is shown for confirmation before saving.
 
+## Deploy (Railway – recommended)
+
+Needs an always-on Node host with a persistent disk (SQLite + uploaded reports). Vercel/Netlify are serverless
+and cannot run this. The repo ships a `Dockerfile` (Node 22 + Tesseract), `railway.json` and `render.yaml`.
+
+1. Push this folder to a GitHub repository.
+2. Railway → **New Project → Deploy from GitHub repo** → pick the repo (Dockerfile is detected).
+3. Service → **Variables**: `GEMINI_API_KEY`, `JWT_SECRET` (any long random string), `DATA_DIR=/app/data`.
+4. Service → **Settings → Volumes → Add volume**, mount path `/app/data` (keeps the database and uploads).
+5. Settings → **Networking → Generate domain**. Open it; demo logins work immediately (seeded on first start).
+
+Render works the same way (`render.yaml` blueprint) but only paid plans have a persistent disk.
+
 ## Architecture
 
 ```
